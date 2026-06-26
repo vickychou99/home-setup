@@ -6,9 +6,9 @@
 <title>新家佈置清單</title>
 <style>
   :root{
-    --bg:#f6f4f1; --card:#ffffff; --ink:#33302c; --sub:#8a827a;
-    --accent:#c4895a; --line:#eae4dd; --shadow:0 6px 22px rgba(120,100,80,.10);
-    --own:#9aa0a6; --buy:#c4895a; --decide:#d9a531; --ordered:#5aa777;
+    --bg:#f4f8f8; --card:#ffffff; --ink:#23383a; --sub:#6f8a8c;
+    --accent:#2b9da3; --line:#dceaea; --shadow:0 6px 22px rgba(40,120,125,.10);
+    --own:#9aa6a8; --buy:#2b9da3; --decide:#e0a82e; --ordered:#3fb27a;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -16,14 +16,14 @@
        background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
   .wrap{max-width:880px;margin:0 auto;padding:0 18px 90px}
 
-  header{background:linear-gradient(135deg,#c4895a,#d9a531);color:#fff;padding:38px 18px 30px;text-align:center}
+  header{background:linear-gradient(135deg,#2b9da3,#38b2ac);color:#fff;padding:38px 18px 30px;text-align:center}
   header h1{margin:0;font-size:27px;letter-spacing:1px;display:flex;gap:9px;align-items:center;justify-content:center}
   header h1 svg{width:26px;height:26px}
   header .sub{font-size:14px;opacity:.95;margin-top:6px}
   header .stat{display:inline-flex;gap:14px;margin-top:14px;font-size:13px;background:rgba(255,255,255,.2);
         border-radius:999px;padding:6px 16px;font-weight:600}
 
-  .filterbar{position:sticky;top:0;z-index:40;background:rgba(246,244,241,.94);backdrop-filter:blur(8px);
+  .filterbar{position:sticky;top:0;z-index:40;background:rgba(244,248,248,.94);backdrop-filter:blur(8px);
         border-bottom:1px solid var(--line);padding:12px 18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
   .seg{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px}
   .seg button{border:none;background:none;font:inherit;font-size:13.5px;font-weight:600;color:var(--sub);
@@ -34,7 +34,7 @@
   .chips{display:flex;gap:7px;flex-wrap:wrap}
   .chips button{border:1px solid var(--line);background:#fff;font:inherit;font-size:12.5px;font-weight:600;
         color:var(--ink);padding:5px 13px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
-  .chips button.on{border-color:var(--accent);background:#f8ede2;color:var(--accent)}
+  .chips button.on{border-color:var(--accent);background:#e3f1f1;color:var(--accent)}
   .chips button svg{width:14px;height:14px}
   .addbtn{margin-left:auto;border:none;background:var(--accent);color:#fff;font:inherit;font-weight:700;font-size:13px;
         padding:8px 15px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
@@ -50,13 +50,13 @@
   .item{position:relative;display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);
         border-radius:14px;padding:14px 15px;box-shadow:var(--shadow);transition:border-color .15s}
   .item:hover{border-color:var(--accent)}
-  .item .ico{width:42px;height:42px;border-radius:11px;background:#f4ece4;flex-shrink:0;
+  .item .ico{width:42px;height:42px;border-radius:11px;background:#e3f1f1;flex-shrink:0;
         display:flex;align-items:center;justify-content:center;color:var(--accent)}
   .item .ico svg{width:22px;height:22px}
   .item .body{flex:1;min-width:0}
   .item .nm{font-weight:700;font-size:15.5px;padding-right:26px}
   .item .meta{font-size:12px;color:var(--sub);margin-top:3px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-  .item .note{font-size:12.5px;color:var(--sub);margin-top:6px;background:#faf6f1;border-radius:8px;padding:7px 9px;line-height:1.5}
+  .item .note{font-size:12.5px;color:var(--sub);margin-top:6px;background:#eef6f6;border-radius:8px;padding:7px 9px;line-height:1.5}
   .badge{font-size:11px;font-weight:700;color:#fff;border-radius:6px;padding:2px 8px;white-space:nowrap}
   .b-own{background:var(--own)} .b-buy{background:var(--buy)} .b-decide{background:var(--decide)} .b-ordered{background:var(--ordered)}
   .tag2{font-size:11px;color:var(--sub);border:1px solid var(--line);border-radius:6px;padding:1px 7px}
@@ -68,7 +68,7 @@
   .check svg{width:14px;height:14px;opacity:0}
   .item.done .check svg{opacity:1}
   .edit{position:absolute;top:11px;right:11px;border:none;background:none;color:var(--sub);cursor:pointer;padding:3px;border-radius:6px}
-  .edit:hover{background:#f4ece4;color:var(--accent)}
+  .edit:hover{background:#e3f1f1;color:var(--accent)}
   .edit svg{width:16px;height:16px}
 
   .empty{grid-column:1/-1;color:var(--sub);font-size:13.5px;background:#fff;border:1px dashed var(--line);
@@ -81,20 +81,20 @@
   footer{text-align:center;color:var(--sub);font-size:12px;margin-top:34px}
   #status{text-align:center;color:var(--sub);font-size:13px;padding:30px}
 
-  #modal{position:fixed;inset:0;z-index:100;background:rgba(40,30,20,.5);display:none;align-items:center;justify-content:center;padding:18px}
+  #modal{position:fixed;inset:0;z-index:100;background:rgba(20,50,52,.5);display:none;align-items:center;justify-content:center;padding:18px}
   #modal.show{display:flex}
   .sheet{background:#fff;border-radius:16px;width:100%;max-width:420px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
   .sheet h3{margin:0 0 14px;font-size:18px}
   .field{margin-bottom:12px}
   .field label{display:block;font-size:12.5px;color:var(--sub);font-weight:600;margin-bottom:4px}
   .field input,.field select,.field textarea{width:100%;font:inherit;font-size:14px;padding:9px 11px;
-        border:1px solid var(--line);border-radius:9px;background:#fafafa;color:var(--ink)}
+        border:1px solid var(--line);border-radius:9px;background:#f6fafa;color:var(--ink)}
   .field textarea{min-height:60px;resize:vertical}
   .row2{display:flex;gap:10px}.row2>*{flex:1}
   .actions{display:flex;gap:9px;margin-top:18px;align-items:center}
   .actions button{font:inherit;font-weight:700;font-size:14px;padding:10px 16px;border-radius:10px;cursor:pointer;border:none}
   .btn-save{background:var(--accent);color:#fff;flex:1}
-  .btn-cancel{background:#f0ebe5;color:var(--ink)}
+  .btn-cancel{background:#e6efef;color:var(--ink)}
   .btn-del{background:none;color:#c0504d;border:1px solid #e6c9c7 !important}
   .btn-del svg{width:15px;height:15px;vertical-align:-3px}
 </style>
@@ -170,7 +170,7 @@
     decide:{label:'待決議',cls:'b-decide'},ordered:{label:'已下訂待取',cls:'b-ordered'}};
   const TYPE_ICON={'家俱':'armchair','家電':'plug-zap'};
   const ICON={'沙發':'sofa','STOKKE 椅子':'armchair','桌子':'table','客廳多功能桌':'table-2','電視櫃':'gallery-horizontal-end',
-    '電視':'tv','床架':'bed-double','微波爐':'microwave','洗衣機':'washing-machine','鞋櫃':'archive'};
+    '電視':'tv','床架':'bed-double','微波爐':'microwave','洗衣機':'washing-machine','鞋櫃':'archive','升降桌':'table-2'};
 
   let ITEMS=[], groupMode='area', typeFilter='all', editingId=null;
 
