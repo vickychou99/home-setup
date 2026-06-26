@@ -8,8 +8,8 @@
   :root{
     --bg:#eef5f5; --card:#ffffff; --ink:#1f3437; --sub:#6f8a8c;
     --accent:#2b9da3; --accent2:#46c0b8; --line:#dcebeb; --shadow:0 8px 26px rgba(40,120,125,.10);
-    --own:#94a3a4; --buy:#2b9da3; --decide:#e0a82e; --ordered:#36b27a;
-    --own-bg:#eef2f2; --buy-bg:#e2f3f3; --decide-bg:#fcf3e1; --ordered-bg:#e4f5ed;
+    --own:#94a3a4; --buy:#2b9da3; --decide:#e0a82e; --ordered:#36b27a; --got:#5b8def;
+    --own-bg:#eef2f2; --buy-bg:#e2f3f3; --decide-bg:#fcf3e1; --ordered-bg:#e4f5ed; --got-bg:#e8eefc;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -77,10 +77,11 @@
   .item::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--cc,var(--buy))}
   .item:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(40,120,125,.16);border-color:#bfe0e0}
   .item.s-own::before{background:var(--own)} .item.s-buy::before{background:var(--buy)}
-  .item.s-decide::before{background:var(--decide)} .item.s-ordered::before{background:var(--ordered)}
+  .item.s-decide::before{background:var(--decide)} .item.s-ordered::before{background:var(--ordered)} .item.s-got::before{background:var(--got)}
   .item .ico{width:46px;height:46px;border-radius:13px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
   .item.s-own .ico{background:var(--own-bg);color:var(--own)} .item.s-buy .ico{background:var(--buy-bg);color:var(--buy)}
   .item.s-decide .ico{background:var(--decide-bg);color:var(--decide)} .item.s-ordered .ico{background:var(--ordered-bg);color:var(--ordered)}
+  .item.s-got .ico{background:var(--got-bg);color:var(--got)}
   .item .ico svg{width:24px;height:24px}
   .item .body{flex:1;min-width:0}
   .item .nm{font-weight:700;font-size:15.5px;padding-right:30px;letter-spacing:.2px}
@@ -89,6 +90,7 @@
   .badge{font-size:11px;font-weight:800;border-radius:7px;padding:3px 9px;white-space:nowrap}
   .b-own{background:var(--own-bg);color:#5b6b6c} .b-buy{background:var(--buy-bg);color:#1d8087}
   .b-decide{background:var(--decide-bg);color:#b07d11} .b-ordered{background:var(--ordered-bg);color:#1f8f63}
+  .b-got{background:var(--got-bg);color:#3a63c4}
   .tag2{font-size:11px;color:var(--sub);background:#f1f6f6;border-radius:7px;padding:2px 8px}
   .item.done{opacity:.6}
   .item.done .nm{text-decoration:line-through;text-decoration-color:var(--sub)}
@@ -175,6 +177,7 @@
     <span><i class="dot" style="background:var(--buy)"></i>待採購</span>
     <span><i class="dot" style="background:var(--decide)"></i>待決議</span>
     <span><i class="dot" style="background:var(--ordered)"></i>已下訂待取</span>
+    <span><i class="dot" style="background:var(--got)"></i>已取貨</span>
     <span style="margin-left:auto">勾選＝完成 · ✏️ 編輯 · 雲端即時同步</span>
   </div>
   <footer>新家佈置 · 資料同步於 Supabase</footer>
@@ -191,6 +194,7 @@
     <div class="field"><label>狀態</label><select id="f-status">
       <option value="own">原有</option><option value="buy">待採購</option>
       <option value="decide">待決議</option><option value="ordered">已下訂待取</option>
+      <option value="got">已取貨</option>
     </select></div>
     <div class="field"><label>備註（選填）</label><textarea id="f-note" placeholder="價格、連結、二選一說明…"></textarea></div>
     <div class="actions">
@@ -213,7 +217,7 @@
     {key:'主臥',icon:'bed-double'},{key:'次臥',icon:'baby'},{key:'和室',icon:'square'},{key:'陽台',icon:'fence'},
   ];
   const STATUS={own:{label:'原有',cls:'b-own'},buy:{label:'待採購',cls:'b-buy'},
-    decide:{label:'待決議',cls:'b-decide'},ordered:{label:'已下訂待取',cls:'b-ordered'}};
+    decide:{label:'待決議',cls:'b-decide'},ordered:{label:'已下訂待取',cls:'b-ordered'},got:{label:'已取貨',cls:'b-got'}};
   const TYPE_ICON={'家俱':'armchair','家電':'plug-zap'};
   const ICON={'沙發':'sofa','STOKKE 椅子':'armchair','桌子':'table','客廳多功能桌':'table-2','電視櫃':'gallery-horizontal-end',
     '電視':'tv','床架':'bed-double','微波爐':'microwave','洗衣機':'washing-machine','鞋櫃':'archive','升降桌':'table-2'};
