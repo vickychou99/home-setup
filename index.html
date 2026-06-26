@@ -23,7 +23,6 @@
   header .stat{display:inline-flex;gap:14px;margin-top:14px;font-size:13px;background:rgba(255,255,255,.2);
         border-radius:999px;padding:6px 16px;font-weight:600}
 
-  /* filter tabs */
   .filterbar{position:sticky;top:0;z-index:40;background:rgba(246,244,241,.94);backdrop-filter:blur(8px);
         border-bottom:1px solid var(--line);padding:12px 18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
   .seg{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px}
@@ -32,12 +31,14 @@
   .seg button.on{background:var(--accent);color:#fff}
   .seg button svg{width:15px;height:15px}
   .filterbar .lbl{font-size:12.5px;color:var(--sub);font-weight:600}
-  /* type sub-filter chips */
-  .chips{display:flex;gap:7px;flex-wrap:wrap;margin-left:auto}
+  .chips{display:flex;gap:7px;flex-wrap:wrap}
   .chips button{border:1px solid var(--line);background:#fff;font:inherit;font-size:12.5px;font-weight:600;
         color:var(--ink);padding:5px 13px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
   .chips button.on{border-color:var(--accent);background:#f8ede2;color:var(--accent)}
   .chips button svg{width:14px;height:14px}
+  .addbtn{margin-left:auto;border:none;background:var(--accent);color:#fff;font:inherit;font-weight:700;font-size:13px;
+        padding:8px 15px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+  .addbtn svg{width:15px;height:15px}
 
   h2.group{font-size:19px;margin:28px 0 12px;display:flex;align-items:center;gap:9px}
   h2.group svg{width:21px;height:21px;color:var(--accent)}
@@ -46,26 +47,29 @@
   .grid{display:grid;gap:13px;grid-template-columns:1fr 1fr}
   @media(max-width:600px){.grid{grid-template-columns:1fr}}
 
-  .item{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);
-        border-radius:14px;padding:14px 15px;box-shadow:var(--shadow);cursor:pointer;transition:border-color .15s}
+  .item{position:relative;display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);
+        border-radius:14px;padding:14px 15px;box-shadow:var(--shadow);transition:border-color .15s}
   .item:hover{border-color:var(--accent)}
   .item .ico{width:42px;height:42px;border-radius:11px;background:#f4ece4;flex-shrink:0;
         display:flex;align-items:center;justify-content:center;color:var(--accent)}
   .item .ico svg{width:22px;height:22px}
   .item .body{flex:1;min-width:0}
-  .item .nm{font-weight:700;font-size:15.5px}
-  .item .meta{font-size:12px;color:var(--sub);margin-top:2px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .item .nm{font-weight:700;font-size:15.5px;padding-right:26px}
+  .item .meta{font-size:12px;color:var(--sub);margin-top:3px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
   .item .note{font-size:12.5px;color:var(--sub);margin-top:6px;background:#faf6f1;border-radius:8px;padding:7px 9px;line-height:1.5}
   .badge{font-size:11px;font-weight:700;color:#fff;border-radius:6px;padding:2px 8px;white-space:nowrap}
   .b-own{background:var(--own)} .b-buy{background:var(--buy)} .b-decide{background:var(--decide)} .b-ordered{background:var(--ordered)}
   .tag2{font-size:11px;color:var(--sub);border:1px solid var(--line);border-radius:6px;padding:1px 7px}
   .item.done{opacity:.55}
   .item.done .nm{text-decoration:line-through}
-  .check{width:19px;height:19px;border:2px solid var(--line);border-radius:6px;flex-shrink:0;margin-top:2px;
-        display:flex;align-items:center;justify-content:center;color:#fff}
+  .check{width:21px;height:21px;border:2px solid var(--line);border-radius:6px;flex-shrink:0;margin-top:1px;
+        display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer}
   .item.done .check{background:var(--ordered);border-color:var(--ordered)}
-  .check svg{width:13px;height:13px;opacity:0}
+  .check svg{width:14px;height:14px;opacity:0}
   .item.done .check svg{opacity:1}
+  .edit{position:absolute;top:11px;right:11px;border:none;background:none;color:var(--sub);cursor:pointer;padding:3px;border-radius:6px}
+  .edit:hover{background:#f4ece4;color:var(--accent)}
+  .edit svg{width:16px;height:16px}
 
   .empty{grid-column:1/-1;color:var(--sub);font-size:13.5px;background:#fff;border:1px dashed var(--line);
         border-radius:12px;padding:16px;text-align:center}
@@ -75,17 +79,35 @@
   .legend span{display:inline-flex;align-items:center;gap:5px}
   .dot{width:10px;height:10px;border-radius:3px;display:inline-block}
   footer{text-align:center;color:var(--sub);font-size:12px;margin-top:34px}
+  #status{text-align:center;color:var(--sub);font-size:13px;padding:30px}
+
+  #modal{position:fixed;inset:0;z-index:100;background:rgba(40,30,20,.5);display:none;align-items:center;justify-content:center;padding:18px}
+  #modal.show{display:flex}
+  .sheet{background:#fff;border-radius:16px;width:100%;max-width:420px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+  .sheet h3{margin:0 0 14px;font-size:18px}
+  .field{margin-bottom:12px}
+  .field label{display:block;font-size:12.5px;color:var(--sub);font-weight:600;margin-bottom:4px}
+  .field input,.field select,.field textarea{width:100%;font:inherit;font-size:14px;padding:9px 11px;
+        border:1px solid var(--line);border-radius:9px;background:#fafafa;color:var(--ink)}
+  .field textarea{min-height:60px;resize:vertical}
+  .row2{display:flex;gap:10px}.row2>*{flex:1}
+  .actions{display:flex;gap:9px;margin-top:18px;align-items:center}
+  .actions button{font:inherit;font-weight:700;font-size:14px;padding:10px 16px;border-radius:10px;cursor:pointer;border:none}
+  .btn-save{background:var(--accent);color:#fff;flex:1}
+  .btn-cancel{background:#f0ebe5;color:var(--ink)}
+  .btn-del{background:none;color:#c0504d;border:1px solid #e6c9c7 !important}
+  .btn-del svg{width:15px;height:15px;vertical-align:-3px}
 </style>
 </head>
 <body>
 <header>
   <h1><i data-lucide="home"></i> 新家佈置清單</h1>
-  <div class="sub">依區域 / 家俱・家電 篩選 · 點項目可標記完成</div>
-  <div class="stat" id="stat"></div>
+  <div class="sub">依區域 / 家俱・家電 篩選 · 雲端同步</div>
+  <div class="stat" id="stat">載入中…</div>
 </header>
 
 <div class="filterbar">
-  <span class="lbl">分類方式</span>
+  <span class="lbl">分類</span>
   <div class="seg" id="groupseg">
     <button data-group="area" class="on"><i data-lucide="layout-grid"></i>依區域</button>
     <button data-group="type"><i data-lucide="package"></i>依類型</button>
@@ -95,86 +117,97 @@
     <button data-type="家俱"><i data-lucide="armchair"></i>家俱</button>
     <button data-type="家電"><i data-lucide="plug-zap"></i>家電</button>
   </div>
+  <button class="addbtn" id="addbtn"><i data-lucide="plus"></i>新增物品</button>
 </div>
 
 <div class="wrap">
+  <div id="status">載入中…</div>
   <div id="content"></div>
 
-  <div class="legend">
+  <div class="legend" id="legend" style="display:none">
     <span><i class="dot" style="background:var(--own)"></i>原有</span>
     <span><i class="dot" style="background:var(--buy)"></i>待採購</span>
     <span><i class="dot" style="background:var(--decide)"></i>待決議</span>
     <span><i class="dot" style="background:var(--ordered)"></i>已下訂待取</span>
-    <span style="margin-left:auto">點卡片＝標記完成（存於本機）</span>
+    <span style="margin-left:auto">勾選＝完成 · ✏️ 編輯 · 雲端即時同步</span>
   </div>
+  <footer>新家佈置 · 資料同步於 Supabase</footer>
+</div>
 
-  <footer>新家佈置 · 進度儲存在瀏覽器本機</footer>
+<div id="modal">
+  <div class="sheet">
+    <h3 id="mtitle">新增物品</h3>
+    <div class="field"><label>名稱</label><input id="f-name" placeholder="例：電視櫃"></div>
+    <div class="row2">
+      <div class="field"><label>區域</label><select id="f-area"></select></div>
+      <div class="field"><label>類型</label><select id="f-type"><option>家俱</option><option>家電</option></select></div>
+    </div>
+    <div class="field"><label>狀態</label><select id="f-status">
+      <option value="own">原有</option><option value="buy">待採購</option>
+      <option value="decide">待決議</option><option value="ordered">已下訂待取</option>
+    </select></div>
+    <div class="field"><label>備註（選填）</label><textarea id="f-note" placeholder="價格、連結、二選一說明…"></textarea></div>
+    <div class="actions">
+      <button class="btn-save" id="m-save">儲存</button>
+      <button class="btn-cancel" id="m-cancel">取消</button>
+      <button class="btn-del" id="m-del" style="display:none"><i data-lucide="trash-2"></i></button>
+    </div>
+  </div>
 </div>
 
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script>
-  // ---- data ----
-  const AREAS = [
-    {key:'玄關', icon:'door-open'},
-    {key:'客廳', icon:'sofa'},
-    {key:'廁所', icon:'bath'},
-    {key:'廚房', icon:'cooking-pot'},
-    {key:'主臥', icon:'bed-double'},
-    {key:'次臥', icon:'baby'},
-    {key:'和室', icon:'square'},
-    {key:'陽台', icon:'fence'},
-  ];
-  const STATUS = {
-    own:     {label:'原有',     cls:'b-own'},
-    buy:     {label:'待採購',   cls:'b-buy'},
-    decide:  {label:'待決議',   cls:'b-decide'},
-    ordered: {label:'已下訂待取',cls:'b-ordered'},
-  };
-  const TYPE_ICON = {'家俱':'armchair','家電':'plug-zap'};
-  const ICON = {
-    '沙發':'sofa','STOKKE 椅子':'armchair','桌子':'table','客廳多功能桌':'table-2',
-    '電視櫃':'gallery-horizontal-end','電視':'tv','床架':'bed-double','嬰兒床':'baby',
-    'Didi 多功能櫸木嬰兒床':'baby','微波爐':'microwave','洗衣機':'washing-machine','鞋櫃':'archive',
-  };
-  const ITEMS = [
-    {id:'sofa',   name:'沙發',               area:'客廳', type:'家俱', status:'own'},
-    {id:'stokke', name:'STOKKE 椅子',        area:'客廳', type:'家俱', status:'own'},
-    {id:'table',  name:'桌子',               area:'客廳', type:'家俱', status:'buy'},
-    {id:'mtable', name:'客廳多功能桌',        area:'客廳', type:'家俱', status:'buy'},
-    {id:'tvunit', name:'電視櫃',             area:'客廳', type:'家俱', status:'buy'},
-    {id:'tv',     name:'電視',               area:'客廳', type:'家電', status:'buy'},
-    {id:'bed',    name:'床架',               area:'主臥', type:'家俱', status:'own'},
-    {id:'crib_m', name:'嬰兒床（二選一）',    area:'主臥', type:'家俱', status:'decide', ico:'嬰兒床',
-       note:'待決議：奇哥 Next2Me Forever 多功能成長安撫嬰兒床　↔　Joie kubbie sleep 嬰兒床'},
-    {id:'crib_s', name:'Didi 多功能櫸木嬰兒床', area:'次臥', type:'家俱', status:'ordered',
-       note:'已下訂、待取貨'},
-    {id:'micro',  name:'微波爐',             area:'廚房', type:'家電', status:'buy'},
-    {id:'washer', name:'洗衣機',             area:'陽台', type:'家電', status:'buy'},
-    {id:'shoe',   name:'鞋櫃',               area:'玄關', type:'家俱', status:'buy'},
-  ];
+  const SB_URL='https://veasxxuveykxycstcnfn.supabase.co';
+  const SB_KEY='sb_publishable_O_1jnHO_5OunHwByeJDHdg_s_sztSkk';
+  const API=SB_URL+'/rest/v1/home_items';
+  const H={ 'apikey':SB_KEY, 'Authorization':'Bearer '+SB_KEY, 'Content-Type':'application/json' };
 
-  const KEY='home_setup_done';
-  const done = JSON.parse(localStorage.getItem(KEY)||'{}');
-  let groupMode='area', typeFilter='all';
+  const AREAS=[
+    {key:'玄關',icon:'door-open'},{key:'客廳',icon:'sofa'},{key:'廁所',icon:'bath'},{key:'廚房',icon:'cooking-pot'},
+    {key:'主臥',icon:'bed-double'},{key:'次臥',icon:'baby'},{key:'和室',icon:'square'},{key:'陽台',icon:'fence'},
+  ];
+  const STATUS={own:{label:'原有',cls:'b-own'},buy:{label:'待採購',cls:'b-buy'},
+    decide:{label:'待決議',cls:'b-decide'},ordered:{label:'已下訂待取',cls:'b-ordered'}};
+  const TYPE_ICON={'家俱':'armchair','家電':'plug-zap'};
+  const ICON={'沙發':'sofa','STOKKE 椅子':'armchair','桌子':'table','客廳多功能桌':'table-2','電視櫃':'gallery-horizontal-end',
+    '電視':'tv','床架':'bed-double','微波爐':'microwave','洗衣機':'washing-machine','鞋櫃':'archive'};
 
-  function iconFor(it){ return ICON[it.ico||it.name] || (it.type==='家電'?'plug-zap':'package'); }
+  let ITEMS=[], groupMode='area', typeFilter='all', editingId=null;
+
+  function iconFor(it){ if(ICON[it.name])return ICON[it.name]; if(/嬰兒床|床/.test(it.name))return 'baby';
+    return it.type==='家電'?'plug-zap':'package'; }
+  function esc(s){return (s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+  function escNl(s){return esc(s).replace(/\n/g,'<br>');}
+
+  async function load(){
+    try{
+      const r=await fetch(API+'?select=*&order=sort_order,id',{headers:H});
+      if(!r.ok) throw new Error(r.status);
+      ITEMS=await r.json();
+      document.getElementById('status').style.display='none';
+      document.getElementById('legend').style.display='flex';
+      render();
+    }catch(e){
+      document.getElementById('status').innerHTML='⚠️ 連線失敗：'+e.message+'<br>請確認 Supabase 設定';
+    }
+  }
 
   function itemCard(it){
-    const st=STATUS[it.status];
-    const isDone=!!done[it.id];
-    return `<div class="item ${isDone?'done':''}" data-id="${it.id}">
-      <div class="check"><i data-lucide="check"></i></div>
+    const st=STATUS[it.status]||STATUS.buy;
+    return `<div class="item ${it.done?'done':''}" data-id="${it.id}">
+      <div class="check" data-act="toggle"><i data-lucide="check"></i></div>
       <div class="ico"><i data-lucide="${iconFor(it)}"></i></div>
       <div class="body">
-        <div class="nm">${it.name}</div>
+        <div class="nm">${esc(it.name)}</div>
         <div class="meta"><span class="badge ${st.cls}">${st.label}</span><span class="tag2">${it.area}</span><span class="tag2">${it.type}</span></div>
-        ${it.note?`<div class="note">${it.note}</div>`:''}
+        ${it.note?`<div class="note">${escNl(it.note)}</div>`:''}
       </div>
+      <button class="edit" data-act="edit"><i data-lucide="pencil"></i></button>
     </div>`;
   }
 
   function render(){
-    const items = ITEMS.filter(it=> typeFilter==='all' || it.type===typeFilter);
+    const items=ITEMS.filter(it=> typeFilter==='all'||it.type===typeFilter);
     let html='';
     if(groupMode==='area'){
       for(const a of AREAS){
@@ -184,7 +217,7 @@
       }
     } else {
       for(const t of ['家俱','家電']){
-        if(typeFilter!=='all' && typeFilter!==t) continue;
+        if(typeFilter!=='all'&&typeFilter!==t) continue;
         const list=items.filter(it=>it.type===t);
         html+=`<h2 class="group"><i data-lucide="${TYPE_ICON[t]}"></i>${t} <span class="cnt">${list.length} 項</span></h2>`;
         html+=`<div class="grid">${ list.length? list.map(itemCard).join('') : `<div class="empty">無</div>` }</div>`;
@@ -197,26 +230,87 @@
   }
 
   function renderStat(){
-    const total=ITEMS.length;
-    const buy=ITEMS.filter(it=>it.status==='buy').length;
-    const decide=ITEMS.filter(it=>it.status==='decide').length;
-    const d=Object.values(done).filter(Boolean).length;
+    const total=ITEMS.length, buy=ITEMS.filter(i=>i.status==='buy').length,
+      decide=ITEMS.filter(i=>i.status==='decide').length, d=ITEMS.filter(i=>i.done).length;
     document.getElementById('stat').innerHTML=`共 ${total} 項 · 待採購 ${buy} · 待決議 ${decide} · 已完成 ${d}`;
   }
 
   function bindCards(){
     document.querySelectorAll('.item').forEach(el=>{
-      el.addEventListener('click',()=>{
-        const id=el.dataset.id;
-        done[id]=!done[id];
-        if(!done[id]) delete done[id];
-        localStorage.setItem(KEY,JSON.stringify(done));
-        el.classList.toggle('done',!!done[id]);
-        renderStat();
-      });
+      const id=+el.dataset.id;
+      el.querySelector('[data-act="toggle"]').addEventListener('click',e=>{e.stopPropagation();toggleDone(id);});
+      el.querySelector('[data-act="edit"]').addEventListener('click',e=>{e.stopPropagation();openEdit(id);});
     });
   }
 
+  async function toggleDone(id){
+    const it=ITEMS.find(x=>x.id===id); if(!it)return;
+    const nv=!it.done; it.done=nv; render();
+    const r=await fetch(API+'?id=eq.'+id,{method:'PATCH',headers:H,body:JSON.stringify({done:nv})});
+    if(!r.ok){ it.done=!nv; render(); alert('同步失敗，請重試'); }
+  }
+
+  const modal=document.getElementById('modal');
+  function fillAreaSelect(){ document.getElementById('f-area').innerHTML=AREAS.map(a=>`<option>${a.key}</option>`).join(''); }
+  function openAdd(){
+    editingId=null;
+    document.getElementById('mtitle').textContent='新增物品';
+    document.getElementById('f-name').value='';
+    document.getElementById('f-area').value='客廳';
+    document.getElementById('f-type').value='家俱';
+    document.getElementById('f-status').value='buy';
+    document.getElementById('f-note').value='';
+    document.getElementById('m-del').style.display='none';
+    modal.classList.add('show');
+  }
+  function openEdit(id){
+    const it=ITEMS.find(x=>x.id===id); if(!it)return;
+    editingId=id;
+    document.getElementById('mtitle').textContent='編輯物品';
+    document.getElementById('f-name').value=it.name;
+    document.getElementById('f-area').value=it.area;
+    document.getElementById('f-type').value=it.type;
+    document.getElementById('f-status').value=it.status;
+    document.getElementById('f-note').value=it.note||'';
+    document.getElementById('m-del').style.display='inline-flex';
+    modal.classList.add('show');
+  }
+  function closeModal(){ modal.classList.remove('show'); }
+
+  async function save(){
+    const payload={
+      name:document.getElementById('f-name').value.trim(),
+      area:document.getElementById('f-area').value,
+      type:document.getElementById('f-type').value,
+      status:document.getElementById('f-status').value,
+      note:document.getElementById('f-note').value.trim()||null,
+    };
+    if(!payload.name){ alert('請輸入名稱'); return; }
+    let r;
+    if(editingId){
+      r=await fetch(API+'?id=eq.'+editingId,{method:'PATCH',headers:{...H,Prefer:'return=representation'},body:JSON.stringify(payload)});
+    }else{
+      payload.sort_order=(Math.max(0,...ITEMS.map(i=>i.sort_order||0))+1);
+      r=await fetch(API,{method:'POST',headers:{...H,Prefer:'return=representation'},body:JSON.stringify(payload)});
+    }
+    if(!r.ok){ alert('儲存失敗：'+r.status); return; }
+    const data=await r.json(); const row=Array.isArray(data)?data[0]:data;
+    if(editingId){ const i=ITEMS.findIndex(x=>x.id===editingId); ITEMS[i]={...ITEMS[i],...row}; }
+    else { ITEMS.push(row); }
+    closeModal(); render();
+  }
+  async function del(){
+    if(!editingId||!confirm('確定刪除這個物品？'))return;
+    const r=await fetch(API+'?id=eq.'+editingId,{method:'DELETE',headers:H});
+    if(!r.ok){ alert('刪除失敗：'+r.status); return; }
+    ITEMS=ITEMS.filter(x=>x.id!==editingId); closeModal(); render();
+  }
+
+  document.getElementById('addbtn').addEventListener('click',openAdd);
+  document.getElementById('m-save').addEventListener('click',save);
+  document.getElementById('m-cancel').addEventListener('click',closeModal);
+  document.getElementById('m-del').addEventListener('click',del);
+  modal.addEventListener('click',e=>{if(e.target===modal)closeModal();});
   document.querySelectorAll('#groupseg button').forEach(b=>b.addEventListener('click',()=>{
     document.querySelectorAll('#groupseg button').forEach(x=>x.classList.remove('on'));
     b.classList.add('on'); groupMode=b.dataset.group; render();
@@ -226,7 +320,9 @@
     b.classList.add('on'); typeFilter=b.dataset.type; render();
   }));
 
-  render();
+  fillAreaSelect();
+  if(window.lucide) lucide.createIcons();
+  load();
 </script>
 </body>
 </html>
