@@ -25,6 +25,12 @@
   header::after{content:"";position:absolute;bottom:-120px;left:-50px;width:240px;height:240px;border-radius:50%;
         background:rgba(255,255,255,.07)}
   header .inner{position:relative;z-index:1;max-width:520px;margin:0 auto}
+  .pageswitch{position:absolute;top:16px;right:16px;z-index:2}
+  .pageswitch a{font-size:12.5px;font-weight:700;color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:5px;
+        background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:7px 13px;backdrop-filter:blur(4px)}
+  .pageswitch a:hover{background:rgba(255,255,255,.28)}
+  .pageswitch a svg{width:14px;height:14px}
+  @media(max-width:480px){.pageswitch{position:static;margin:0 auto 4px;display:flex;justify-content:center}}
   header h1{margin:0;font-size:28px;letter-spacing:1px;display:flex;gap:10px;align-items:center;justify-content:center;font-weight:800}
   header h1 svg{width:28px;height:28px}
   header .sub{font-size:13.5px;opacity:.92;margin-top:5px}
@@ -144,6 +150,7 @@
 </head>
 <body>
 <header>
+  <div class="pageswitch"><a href="moving.html"><i data-lucide="truck"></i>搬家待辦清單</a></div>
   <div class="inner">
     <h1><i data-lucide="house-plus"></i> 新家佈置清單</h1>
     <div class="sub">依區域 / 家俱・家電 篩選 · 雲端同步</div>
@@ -165,7 +172,6 @@
     <button data-type="家俱"><i data-lucide="armchair"></i>家俱</button>
     <button data-type="家電"><i data-lucide="plug-zap"></i>家電</button>
   </div>
-  <a class="addbtn" href="moving.html" style="text-decoration:none;background:#fff;color:var(--accent);border:1px solid var(--line);box-shadow:none"><i data-lucide="truck"></i>搬家待辦</a>
   <button class="addbtn" id="addbtn"><i data-lucide="plus"></i>新增</button>
 </div>
 

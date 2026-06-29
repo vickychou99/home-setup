@@ -21,6 +21,12 @@
   header::before{content:"";position:absolute;top:-90px;right:-60px;width:260px;height:260px;border-radius:50%;background:rgba(255,255,255,.10)}
   header::after{content:"";position:absolute;bottom:-120px;left:-50px;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,.07)}
   header .inner{position:relative;z-index:1;max-width:520px;margin:0 auto}
+  .pageswitch{position:absolute;top:16px;right:16px;z-index:2}
+  .pageswitch a{font-size:12.5px;font-weight:700;color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:5px;
+        background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:7px 13px;backdrop-filter:blur(4px)}
+  .pageswitch a:hover{background:rgba(255,255,255,.28)}
+  .pageswitch a svg{width:14px;height:14px}
+  @media(max-width:480px){.pageswitch{position:static;margin:0 auto 4px;display:flex;justify-content:center}}
   header h1{margin:0;font-size:27px;letter-spacing:1px;display:flex;gap:10px;align-items:center;justify-content:center;font-weight:800}
   header h1 svg{width:27px;height:27px}
   header .sub{font-size:13.5px;opacity:.92;margin-top:5px}
@@ -94,6 +100,7 @@
 </head>
 <body>
 <header>
+  <div class="pageswitch"><a href="index.html"><i data-lucide="house-plus"></i>新家佈置清單</a></div>
   <div class="inner">
     <h1><i data-lucide="truck"></i> 搬家待辦清單</h1>
     <div class="sub">雲端同步 · 點圈圈打勾完成</div>
@@ -105,7 +112,6 @@
 </header>
 
 <div class="bar">
-  <a class="navlink" href="index.html"><i data-lucide="home"></i>新家佈置</a>
   <button class="addbtn" id="addbtn"><i data-lucide="plus"></i>新增待辦</button>
 </div>
 
