@@ -48,6 +48,21 @@
         padding:9px 16px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;box-shadow:0 3px 10px rgba(43,157,163,.32);transition:.18s}
   .addbtn:hover{transform:translateY(-1px)}
   .addbtn svg{width:15px;height:15px}
+  .gcalbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font:inherit;font-weight:700;font-size:12.5px;
+        padding:9px 14px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:.18s}
+  .gcalbtn:hover{background:var(--done-bg)}
+  .gcalbtn.on{background:var(--done-bg);border-color:var(--done);color:#1f8f63}
+  .gcalbtn svg{width:15px;height:15px}
+  .gpanel{margin-top:20px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+  .gpanel .ghead{display:flex;align-items:center;gap:8px;font-weight:800;font-size:15px;margin-bottom:4px}
+  .gpanel .ghead svg{width:18px;height:18px;color:var(--accent)}
+  .gpanel .gsync{margin-left:auto;border:none;background:linear-gradient(135deg,#2b9da3,#46c0b8);color:#fff;font:inherit;font-weight:700;font-size:12px;
+        padding:7px 13px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+  .gpanel .gsync svg{width:14px;height:14px}
+  .gpanel .ghint{font-size:12px;color:var(--sub);margin-bottom:10px}
+  .gevent{display:flex;gap:10px;align-items:center;padding:8px 0;border-top:1px dashed var(--line);font-size:13.5px}
+  .gevent:first-of-type{border-top:none}
+  .gevent .gdate{font-weight:700;color:var(--accent);font-size:12.5px;min-width:88px;flex-shrink:0}
 
   .list{margin-top:22px}
   .mgroup{margin:26px 0 13px;display:flex;align-items:center;gap:11px}
@@ -135,10 +150,18 @@
 </header>
 
 <div class="bar">
+  <button class="gcalbtn" id="gcal-btn"><i data-lucide="calendar"></i>連結 Google 行事曆</button>
   <button class="addbtn" id="addbtn"><i data-lucide="plus"></i>新增待辦</button>
 </div>
 
 <div class="wrap">
+  <div class="gpanel" id="gcal-panel" style="display:none">
+    <div class="ghead"><i data-lucide="calendar-check"></i>近期行事曆
+      <button class="gsync" id="gcal-sync"><i data-lucide="refresh-cw"></i>同步處理中待辦</button>
+    </div>
+    <div class="ghint">把「處理中且有日期」的待辦同步到你的 Google 行事曆</div>
+    <div id="gcal-events"></div>
+  </div>
   <div id="sqlhint" style="display:none;margin-top:18px;background:#fff7e6;border:1px solid #f3e0b0;border-radius:14px;padding:14px 16px;font-size:13px;color:#8a6d1f;line-height:1.6">
     💡 想啟用「處理中」狀態，請到 Supabase → SQL Editor 執行一次：<br>
     <code style="display:block;background:#fff;border:1px solid #efe2c0;border-radius:8px;padding:8px 10px;margin-top:7px;font-size:12px;color:#5a4a16;white-space:pre-wrap">alter table moving_todos add column status text not null default 'todo';
@@ -170,6 +193,8 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
   </div>
 </div>
 
+<script src="https://accounts.google.com/gsi/client" async></script>
+<script src="gcal.js"></script>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script>
   const SB_URL='https://veasxxuveykxycstcnfn.supabase.co';
@@ -329,6 +354,49 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
 
   if(window.lucide) lucide.createIcons();
   load();
+
+  // ---- Google 行事曆串接 ----
+  const gbtn=document.getElementById('gcal-btn');
+  const gpanel=document.getElementById('gcal-panel');
+  function gUI(connected){
+    if(connected){ gbtn.innerHTML='<i data-lucide="calendar-check"></i>行事曆已連結'; gbtn.classList.add('on');
+      gpanel.style.display='block'; refreshGcal(); }
+    else { gbtn.innerHTML='<i data-lucide="calendar"></i>連結 Google 行事曆'; gbtn.classList.remove('on'); gpanel.style.display='none'; }
+    if(window.lucide) lucide.createIcons();
+  }
+  GCAL.init(gUI);
+  gbtn.addEventListener('click',()=>{ if(!GCAL.connected()) GCAL.connect(); });
+  document.getElementById('gcal-sync').addEventListener('click',syncDoing);
+
+  async function refreshGcal(){
+    const box=document.getElementById('gcal-events');
+    try{
+      const evs=await GCAL.listUpcoming(8);
+      box.innerHTML = evs.length ? evs.map(e=>{
+        const when=(e.start.date||e.start.dateTime||'').slice(0,10);
+        return `<div class="gevent"><span class="gdate">${when}</span><span>${esc(e.summary||'(無標題)')}</span></div>`;
+      }).join('') : '<div style="color:var(--sub);font-size:13px">近期沒有行程</div>';
+    }catch(e){ box.innerHTML='<div style="color:var(--sub);font-size:13px">'+esc(e.message)+'</div>'; }
+  }
+  async function syncDoing(){
+    if(!GCAL.connected()){ GCAL.connect(); return; }
+    const targets=ITEMS.filter(i=> st(i)==='doing' && i.due_date);
+    if(!targets.length){ alert('沒有「處理中且有日期」的待辦可同步'); return; }
+    let ok=0;
+    for(const it of targets){
+      try{
+        if(it.gcal_event_id){ await GCAL.updateEvent(it.gcal_event_id, it.task, it.due_date, it.note||''); }
+        else{
+          const ev=await GCAL.createEvent(it.task, it.due_date, it.note||'');
+          await fetch(API+'?id=eq.'+it.id,{method:'PATCH',headers:H,body:JSON.stringify({gcal_event_id:ev.id})});
+          it.gcal_event_id=ev.id;
+        }
+        ok++;
+      }catch(e){ console.warn(e); }
+    }
+    alert('已同步 '+ok+' 筆到 Google 行事曆');
+    refreshGcal();
+  }
 </script>
 </body>
 </html>
