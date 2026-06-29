@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>搬家待辦清單</title>
+<title>待辦清單</title>
 <style>
   :root{
     --bg:#eef5f5; --card:#ffffff; --ink:#1f3437; --sub:#6f8a8c;
@@ -119,9 +119,9 @@
   <div class="inner">
     <div class="tabs">
       <a href="index.html"><i data-lucide="house-plus"></i>新家佈置</a>
-      <a class="on" href="moving.html"><i data-lucide="truck"></i>搬家待辦</a>
+      <a class="on" href="moving.html"><i data-lucide="truck"></i>待辦清單</a>
     </div>
-    <h1><i data-lucide="truck"></i> 搬家待辦清單</h1>
+    <h1><i data-lucide="truck"></i> 待辦清單</h1>
     <div class="sub">點圈圈切換：待辦 → 處理中 → 完成</div>
     <div class="prog">
       <div class="prog-top"><span>完成進度</span><b id="pct">0%</b></div>
@@ -144,7 +144,7 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
   </div>
   <div id="status">載入中…</div>
   <div class="list" id="list"></div>
-  <footer>搬家待辦 · 資料同步於 Supabase</footer>
+  <footer>待辦清單 · 資料同步於 Supabase</footer>
 </div>
 
 <div id="modal">
