@@ -37,6 +37,9 @@
   .prog-top b{font-size:21px;font-weight:800}
   .prog-bar{height:9px;border-radius:99px;background:rgba(255,255,255,.25);margin:9px 0 0;overflow:hidden}
   .prog-fill{height:100%;border-radius:99px;background:#fff;width:0;transition:width .5s cubic-bezier(.4,0,.2,1)}
+  #progsub{margin-top:11px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .pcount{font-size:12px;font-weight:700;background:rgba(255,255,255,.18);border-radius:99px;padding:4px 11px;display:inline-flex;gap:5px;align-items:center}
+  .pcount i{width:8px;height:8px;border-radius:3px;display:inline-block}
 
   .bar{position:sticky;top:0;z-index:40;background:rgba(238,245,245,.92);backdrop-filter:blur(10px);
         border-bottom:1px solid var(--line);padding:11px 18px;display:flex;gap:10px;align-items:center}
@@ -146,7 +149,7 @@
     <div class="prog">
       <div class="prog-top"><span>完成進度</span><b id="pct">0%</b></div>
       <div class="prog-bar"><div class="prog-fill" id="pfill"></div></div>
-      <div id="progsub" style="font-size:12px;opacity:.9;margin-top:9px;font-weight:600"></div>
+      <div id="progsub"></div>
     </div>
   </div>
 </header>
