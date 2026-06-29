@@ -127,6 +127,12 @@
 </div>
 
 <div class="wrap">
+  <div id="sqlhint" style="display:none;margin-top:18px;background:#fff7e6;border:1px solid #f3e0b0;border-radius:14px;padding:14px 16px;font-size:13px;color:#8a6d1f;line-height:1.6">
+    💡 想啟用「處理中」狀態，請到 Supabase → SQL Editor 執行一次：<br>
+    <code style="display:block;background:#fff;border:1px solid #efe2c0;border-radius:8px;padding:8px 10px;margin-top:7px;font-size:12px;color:#5a4a16;white-space:pre-wrap">alter table moving_todos add column status text not null default 'todo';
+update moving_todos set status = case when done then 'done' else 'todo' end;</code>
+    執行前目前用「待辦 ↔ 完成」兩狀態，仍可正常勾選與儲存。
+  </div>
   <div id="status">載入中…</div>
   <div class="list" id="list"></div>
   <footer>搬家待辦 · 資料同步於 Supabase</footer>
@@ -155,9 +161,11 @@
   const API=SB_URL+'/rest/v1/moving_todos';
   const H={ 'apikey':SB_KEY, 'Authorization':'Bearer '+SB_KEY, 'Content-Type':'application/json' };
 
-  let ITEMS=[], editingId=null;
+  let ITEMS=[], editingId=null, HAS_STATUS=true;
   const STATUS={todo:{label:'待辦',cls:'b-todo'},doing:{label:'處理中',cls:'b-doing'},done:{label:'完成',cls:'b-done'}};
-  const NEXT={todo:'doing',doing:'done',done:'todo'};
+  const NEXT3={todo:'doing',doing:'done',done:'todo'};   // 有 status 欄位：三狀態循環
+  const NEXT2={todo:'done',doing:'done',done:'todo'};    // 無 status 欄位：待辦↔完成
+  const NEXT=()=> HAS_STATUS?NEXT3:NEXT2;
   function st(it){ return it.status || (it.done?'done':'todo'); }  // 相容舊資料
   function esc(s){return (s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
 
@@ -171,10 +179,16 @@
 
   async function load(){
     try{
+      // 偵測 status 欄位是否存在
+      const probe=await fetch(API+'?select=status&limit=1',{headers:H});
+      HAS_STATUS=probe.ok;
       const r=await fetch(API+'?select=*&order=sort_order,id',{headers:H});
       if(!r.ok) throw new Error(r.status);
       ITEMS=await r.json();
       document.getElementById('status').style.display='none';
+      document.getElementById('sqlhint').style.display=HAS_STATUS?'none':'block';
+      const doingOpt=document.querySelector('#f-status option[value="doing"]');
+      if(doingOpt) doingOpt.style.display=HAS_STATUS?'':'none';
       render();
     }catch(e){
       document.getElementById('status').innerHTML='⚠️ 連線失敗：'+e.message+'<br>請先在 Supabase 建立 moving_todos 資料表';
@@ -216,9 +230,10 @@
   }
   async function cycle(id,el){
     const it=ITEMS.find(x=>x.id===id); if(!it)return;
-    const prev=st(it), ns=NEXT[prev];
+    const prev=st(it), ns=NEXT()[prev];
     setLocal(it,el,ns);
-    const r=await fetch(API+'?id=eq.'+id,{method:'PATCH',headers:H,body:JSON.stringify({status:ns,done:ns==='done'})});
+    const body = HAS_STATUS ? {status:ns,done:ns==='done'} : {done:ns==='done'};
+    const r=await fetch(API+'?id=eq.'+id,{method:'PATCH',headers:H,body:JSON.stringify(body)});
     if(!r.ok){ setLocal(it,el,prev); alert('同步失敗，請重試'); }
   }
   function setLocal(it,el,s){
@@ -245,7 +260,8 @@
   async function save(){
     const s=document.getElementById('f-status').value;
     const payload={ task:document.getElementById('f-task').value.trim(), note:document.getElementById('f-note').value.trim()||null,
-      status:s, done:(s==='done') };
+      done:(s==='done') };
+    if(HAS_STATUS) payload.status=s;   // 無欄位時不送 status，避免 400
     if(!payload.task){ alert('請輸入待辦事項'); return; }
     let r;
     if(editingId){ r=await fetch(API+'?id=eq.'+editingId,{method:'PATCH',headers:{...H,Prefer:'return=representation'},body:JSON.stringify(payload)}); }
