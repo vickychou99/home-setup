@@ -118,7 +118,7 @@
   .sheet h3 svg{width:19px;height:19px;color:var(--accent)}
   .field{margin-bottom:13px}
   .field label{display:block;font-size:12px;color:var(--sub);font-weight:700;margin-bottom:5px}
-  .field input,.field textarea{width:100%;font:inherit;font-size:14px;padding:10px 12px;border:1.5px solid var(--line);border-radius:11px;background:#f7fbfb;color:var(--ink);transition:.15s}
+  .field input,.field textarea{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1.5px solid var(--line);border-radius:11px;background:#f7fbfb;color:var(--ink);transition:.15s}
   .field input:focus,.field textarea:focus{outline:none;border-color:var(--accent);background:#fff}
   .field textarea{min-height:64px;resize:vertical}
   .row2{display:flex;gap:10px}.row2>*{flex:1}
@@ -178,8 +178,8 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
     <h3 id="mtitle"><i data-lucide="plus"></i>新增待辦</h3>
     <div class="field"><label>待辦事項</label><input id="f-task" placeholder="例：找搬家公司、預約搬家"></div>
     <div class="row2">
-      <div class="field"><label>月份</label><select id="f-month" style="width:100%;font:inherit;font-size:14px;padding:10px 12px;border:1.5px solid var(--line);border-radius:11px;background:#f7fbfb;color:var(--ink)"></select></div>
-      <div class="field"><label>狀態</label><select id="f-status" style="width:100%;font:inherit;font-size:14px;padding:10px 12px;border:1.5px solid var(--line);border-radius:11px;background:#f7fbfb;color:var(--ink)">
+      <div class="field"><label>月份</label><select id="f-month" style="width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1.5px solid var(--line);border-radius:11px;background:#f7fbfb;color:var(--ink)"></select></div>
+      <div class="field"><label>狀態</label><select id="f-status" style="width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1.5px solid var(--line);border-radius:11px;background:#f7fbfb;color:var(--ink)">
         <option value="todo">待辦</option><option value="doing">處理中</option><option value="done">完成</option>
       </select></div>
     </div>
@@ -275,7 +275,10 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
       doing=ITEMS.filter(i=>st(i)==='doing').length, pct=total?Math.round(d/total*100):0;
     document.getElementById('pct').textContent=pct+'%';
     document.getElementById('pfill').style.width=pct+'%';
-    const sub=document.getElementById('progsub'); if(sub) sub.textContent=`完成 ${d} · 處理中 ${doing} · 待辦 ${total-d-doing}`;
+    const sub=document.getElementById('progsub');
+    if(sub) sub.innerHTML=`<span class="pcount"><i style="background:var(--done)"></i>完成 ${d}</span>`+
+      `<span class="pcount"><i style="background:var(--doing)"></i>處理中 ${doing}</span>`+
+      `<span class="pcount"><i style="background:var(--todo)"></i>待辦 ${total-d-doing}</span>`;
   }
   function bind(){
     document.querySelectorAll('.todo').forEach(el=>{

@@ -37,7 +37,9 @@
   .prog-top b{font-size:21px;font-weight:800}
   .prog-bar{height:9px;border-radius:99px;background:rgba(255,255,255,.25);margin:9px 0 0;overflow:hidden}
   .prog-fill{height:100%;border-radius:99px;background:#fff;width:0;transition:width .5s cubic-bezier(.4,0,.2,1)}
-  #progsub{font-size:12px;opacity:.9;margin-top:9px;font-weight:600}
+  #progsub{margin-top:11px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .pcount{font-size:12px;font-weight:700;background:rgba(255,255,255,.18);border-radius:99px;padding:4px 11px;display:inline-flex;gap:5px;align-items:center}
+  .pcount i{width:8px;height:8px;border-radius:3px;display:inline-block}
 
   .bar{position:sticky;top:0;z-index:40;background:rgba(238,245,245,.92);backdrop-filter:blur(10px);
         border-bottom:1px solid var(--line);padding:11px 18px;display:flex;gap:10px;align-items:center}
@@ -105,7 +107,7 @@
   .sheet h3 svg{width:19px;height:19px;color:var(--accent)}
   .field{margin-bottom:13px}
   .field label{display:block;font-size:12px;color:var(--sub);font-weight:700;margin-bottom:5px}
-  .field input,.field select,.field textarea{width:100%;font:inherit;font-size:14px;padding:10px 12px;border:1.5px solid var(--line);border-radius:11px;background:#f7fbfb;color:var(--ink);transition:.15s}
+  .field input,.field select,.field textarea{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1.5px solid var(--line);border-radius:11px;background:#f7fbfb;color:var(--ink);transition:.15s}
   .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent);background:#fff}
   .field textarea{min-height:64px;resize:vertical}
   .row2{display:flex;gap:10px}.row2>*{flex:1}
@@ -221,7 +223,10 @@
       doing=ITEMS.filter(i=>st(i)==='doing').length, pct=total?Math.round(d/total*100):0;
     document.getElementById('pct').textContent=pct+'%';
     document.getElementById('pfill').style.width=pct+'%';
-    const sub=document.getElementById('progsub'); if(sub) sub.textContent=`完成 ${d} · 處理中 ${doing} · 待辦 ${total-d-doing}`;
+    const sub=document.getElementById('progsub');
+    if(sub) sub.innerHTML=`<span class="pcount"><i style="background:var(--done)"></i>完成 ${d}</span>`+
+      `<span class="pcount"><i style="background:var(--doing)"></i>處理中 ${doing}</span>`+
+      `<span class="pcount"><i style="background:var(--todo)"></i>待辦 ${total-d-doing}</span>`;
   }
   function bind(){
     document.querySelectorAll('.todo').forEach(el=>{
