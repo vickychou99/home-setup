@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>待辦清單</title>
+<title>寶寶待辦事項</title>
 <style>
   :root{
     --bg:#eef5f5; --card:#ffffff; --ink:#1f3437; --sub:#6f8a8c;
@@ -24,7 +24,7 @@
   header .inner{position:relative;z-index:1;max-width:520px;margin:0 auto}
   .tabs{display:inline-flex;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.28);
         border-radius:999px;padding:4px;gap:3px;margin-bottom:18px;flex-wrap:wrap;justify-content:center}
-  .tabs a{font-size:13px;font-weight:700;color:#fff;text-decoration:none;padding:8px 17px;border-radius:999px;
+  .tabs a{font-size:13px;font-weight:700;color:#fff;text-decoration:none;padding:8px 15px;border-radius:999px;
         display:inline-flex;align-items:center;gap:6px;opacity:.82;transition:.15s}
   .tabs a.on{background:#fff;color:var(--accent);opacity:1;box-shadow:0 2px 9px rgba(0,0,0,.14)}
   .tabs a:not(.on):hover{opacity:1;background:rgba(255,255,255,.12)}
@@ -37,27 +37,16 @@
   .prog-top b{font-size:21px;font-weight:800}
   .prog-bar{height:9px;border-radius:99px;background:rgba(255,255,255,.25);margin:9px 0 0;overflow:hidden}
   .prog-fill{height:100%;border-radius:99px;background:#fff;width:0;transition:width .5s cubic-bezier(.4,0,.2,1)}
+  #progsub{font-size:12px;opacity:.9;margin-top:9px;font-weight:600}
 
   .bar{position:sticky;top:0;z-index:40;background:rgba(238,245,245,.92);backdrop-filter:blur(10px);
         border-bottom:1px solid var(--line);padding:11px 18px;display:flex;gap:10px;align-items:center}
-  .navlink{font-size:13px;font-weight:700;color:var(--accent);text-decoration:none;display:inline-flex;align-items:center;gap:5px;
-        background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 14px}
-  .navlink:hover{background:var(--done-bg)}
-  .navlink svg{width:15px;height:15px}
   .addbtn{margin-left:auto;border:none;background:linear-gradient(135deg,#2b9da3,#46c0b8);color:#fff;font:inherit;font-weight:700;font-size:13px;
         padding:9px 16px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;box-shadow:0 3px 10px rgba(43,157,163,.32);transition:.18s}
   .addbtn:hover{transform:translateY(-1px)}
   .addbtn svg{width:15px;height:15px}
 
-  .list{margin-top:22px}
-  .mgroup{margin:26px 0 13px;display:flex;align-items:center;gap:11px}
-  .mgroup:first-child{margin-top:4px}
-  .mico{width:36px;height:36px;border-radius:11px;background:#fff;border:1px solid var(--line);
-        display:flex;align-items:center;justify-content:center;color:var(--accent);box-shadow:var(--shadow)}
-  .mico svg{width:19px;height:19px}
-  .mname{font-size:18px;font-weight:800}
-  .mcnt{margin-left:auto;font-size:12.5px;font-weight:700;color:var(--sub);background:#fff;border:1px solid var(--line);border-radius:99px;padding:3px 12px}
-  .mlist{display:flex;flex-direction:column;gap:12px}
+  .list{margin-top:22px;display:flex;flex-direction:column;gap:12px}
   .todo{position:relative;display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);
         border-radius:16px;padding:16px 16px 16px 18px;box-shadow:var(--shadow);transition:transform .18s,box-shadow .18s,border-color .18s;
         overflow:hidden;animation:rise .34s ease both}
@@ -69,10 +58,8 @@
         display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;transition:.15s;background:#fff}
   .check:hover{border-color:var(--doing)}
   .check svg{width:15px;height:15px;opacity:0;transform:scale(.5);transition:.15s}
-  /* 處理中：半圈琥珀＋中心點 */
   .todo.s-doing .check{border-color:var(--doing)}
   .todo.s-doing .check::after{content:"";width:11px;height:11px;border-radius:50%;background:var(--doing)}
-  /* 完成：實心綠＋勾 */
   .todo.s-done .check{background:var(--done);border-color:var(--done)}
   .todo.s-done .check svg{opacity:1;transform:scale(1)}
   .badge{font-size:11px;font-weight:800;border-radius:7px;padding:3px 9px;white-space:nowrap}
@@ -103,8 +90,8 @@
   .sheet h3 svg{width:19px;height:19px;color:var(--accent)}
   .field{margin-bottom:13px}
   .field label{display:block;font-size:12px;color:var(--sub);font-weight:700;margin-bottom:5px}
-  .field input,.field textarea{width:100%;font:inherit;font-size:14px;padding:10px 12px;border:1.5px solid var(--line);border-radius:11px;background:#f7fbfb;color:var(--ink);transition:.15s}
-  .field input:focus,.field textarea:focus{outline:none;border-color:var(--accent);background:#fff}
+  .field input,.field select,.field textarea{width:100%;font:inherit;font-size:14px;padding:10px 12px;border:1.5px solid var(--line);border-radius:11px;background:#f7fbfb;color:var(--ink);transition:.15s}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent);background:#fff}
   .field textarea{min-height:64px;resize:vertical}
   .row2{display:flex;gap:10px}.row2>*{flex:1}
   .actions{display:flex;gap:9px;margin-top:20px;align-items:center}
@@ -121,15 +108,15 @@
   <div class="inner">
     <div class="tabs">
       <a href="index.html"><i data-lucide="house-plus"></i>新家佈置</a>
-      <a class="on" href="moving.html"><i data-lucide="list-checks"></i>待辦清單</a>
-      <a href="baby.html"><i data-lucide="baby"></i>寶寶待辦</a>
+      <a href="moving.html"><i data-lucide="list-checks"></i>待辦清單</a>
+      <a class="on" href="baby.html"><i data-lucide="baby"></i>寶寶待辦</a>
     </div>
-    <h1><i data-lucide="truck"></i> 待辦清單</h1>
+    <h1><i data-lucide="baby"></i> 寶寶待辦事項</h1>
     <div class="sub">點圈圈切換：待辦 → 處理中 → 完成</div>
     <div class="prog">
       <div class="prog-top"><span>完成進度</span><b id="pct">0%</b></div>
       <div class="prog-bar"><div class="prog-fill" id="pfill"></div></div>
-      <div id="progsub" style="font-size:12px;opacity:.9;margin-top:9px;font-weight:600"></div>
+      <div id="progsub"></div>
     </div>
   </div>
 </header>
@@ -139,29 +126,22 @@
 </div>
 
 <div class="wrap">
-  <div id="sqlhint" style="display:none;margin-top:18px;background:#fff7e6;border:1px solid #f3e0b0;border-radius:14px;padding:14px 16px;font-size:13px;color:#8a6d1f;line-height:1.6">
-    💡 想啟用「處理中」狀態，請到 Supabase → SQL Editor 執行一次：<br>
-    <code style="display:block;background:#fff;border:1px solid #efe2c0;border-radius:8px;padding:8px 10px;margin-top:7px;font-size:12px;color:#5a4a16;white-space:pre-wrap">alter table moving_todos add column status text not null default 'todo';
-update moving_todos set status = case when done then 'done' else 'todo' end;</code>
-    執行前目前用「待辦 ↔ 完成」兩狀態，仍可正常勾選與儲存。
-  </div>
   <div id="status">載入中…</div>
   <div class="list" id="list"></div>
-  <footer>待辦清單 · 資料同步於 Supabase</footer>
+  <footer>寶寶待辦 · 資料同步於 Supabase</footer>
 </div>
 
 <div id="modal">
   <div class="sheet">
     <h3 id="mtitle"><i data-lucide="plus"></i>新增待辦</h3>
-    <div class="field"><label>待辦事項</label><input id="f-task" placeholder="例：找搬家公司、預約搬家"></div>
+    <div class="field"><label>待辦事項</label><input id="f-task" placeholder="例：確認要入籍到哪裡"></div>
     <div class="row2">
-      <div class="field"><label>月份</label><select id="f-month" style="width:100%;font:inherit;font-size:14px;padding:10px 12px;border:1.5px solid var(--line);border-radius:11px;background:#f7fbfb;color:var(--ink)"></select></div>
-      <div class="field"><label>狀態</label><select id="f-status" style="width:100%;font:inherit;font-size:14px;padding:10px 12px;border:1.5px solid var(--line);border-radius:11px;background:#f7fbfb;color:var(--ink)">
+      <div class="field"><label>狀態</label><select id="f-status">
         <option value="todo">待辦</option><option value="doing">處理中</option><option value="done">完成</option>
       </select></div>
+      <div class="field"><label>日期（選填）</label><input id="f-date" type="date"></div>
     </div>
-    <div class="field"><label>日期（選填 · 用於行事曆）</label><input id="f-date" type="date"></div>
-    <div class="field"><label>備註（選填）</label><textarea id="f-note" placeholder="日期、電話、報價、提醒…"></textarea></div>
+    <div class="field"><label>備註（選填）</label><textarea id="f-note" placeholder="醫院、聯絡人、提醒…"></textarea></div>
     <div class="actions">
       <button class="btn-save" id="m-save">儲存</button>
       <button class="btn-cancel" id="m-cancel">取消</button>
@@ -174,45 +154,26 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
 <script>
   const SB_URL='https://veasxxuveykxycstcnfn.supabase.co';
   const SB_KEY='sb_publishable_O_1jnHO_5OunHwByeJDHdg_s_sztSkk';
-  const API=SB_URL+'/rest/v1/moving_todos';
+  const API=SB_URL+'/rest/v1/baby_todos';
   const H={ 'apikey':SB_KEY, 'Authorization':'Bearer '+SB_KEY, 'Content-Type':'application/json' };
 
-  let ITEMS=[], editingId=null, HAS_STATUS=true;
+  let ITEMS=[], editingId=null;
   const STATUS={todo:{label:'待辦',cls:'b-todo'},doing:{label:'處理中',cls:'b-doing'},done:{label:'完成',cls:'b-done'}};
-  const NEXT3={todo:'doing',doing:'done',done:'todo'};   // 有 status 欄位：三狀態循環
-  const NEXT2={todo:'done',doing:'done',done:'todo'};    // 無 status 欄位：待辦↔完成
-  const NEXT=()=> HAS_STATUS?NEXT3:NEXT2;
-  function st(it){ return it.status || (it.done?'done':'todo'); }  // 相容舊資料
+  const NEXT={todo:'doing',doing:'done',done:'todo'};
+  function st(it){ return it.status || (it.done?'done':'todo'); }
   function esc(s){return (s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
-
-  function iconFor(t){
-    if(/合約|租/.test(t))return 'file-text';
-    if(/房東|續租|說/.test(t))return 'message-square';
-    if(/搬家公司|預約|搬/.test(t))return 'truck';
-    if(/地板|修補|油漆|清潔|修/.test(t))return 'hammer';
-    return 'check-circle';
-  }
 
   async function load(){
     try{
-      // 偵測 status 欄位是否存在
-      const probe=await fetch(API+'?select=status&limit=1',{headers:H});
-      HAS_STATUS=probe.ok;
       const r=await fetch(API+'?select=*&order=sort_order,id',{headers:H});
       if(!r.ok) throw new Error(r.status);
       ITEMS=await r.json();
-      buildMonthOptions();
       document.getElementById('status').style.display='none';
-      document.getElementById('sqlhint').style.display=HAS_STATUS?'none':'block';
-      const doingOpt=document.querySelector('#f-status option[value="doing"]');
-      if(doingOpt) doingOpt.style.display=HAS_STATUS?'':'none';
       render();
-    }catch(e){
-      document.getElementById('status').innerHTML='⚠️ 連線失敗：'+e.message+'<br>請先在 Supabase 建立 moving_todos 資料表';
-    }
+    }catch(e){ document.getElementById('status').innerHTML='⚠️ 連線失敗：'+e.message; }
   }
 
-  function card(it,i){
+  function card(it){
     const s=st(it), sd=STATUS[s];
     return `<div class="todo s-${s}" data-id="${it.id}">
       <div class="check" data-act="toggle" title="點一下切換狀態"><i data-lucide="check"></i></div>
@@ -224,25 +185,10 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
       <button class="edit" data-act="edit"><i data-lucide="pencil"></i></button>
     </div>`;
   }
-
-  function monthNum(m){ const n=parseInt(m); return isNaN(n)?99:n; }
-  function monthsInData(){
-    return [...new Set(ITEMS.map(i=>i.month||'7月'))].sort((a,b)=>monthNum(a)-monthNum(b));
-  }
   function render(){
-    if(!ITEMS.length){
-      document.getElementById('list').innerHTML=`<div style="text-align:center;color:var(--sub);padding:30px">尚無待辦，點右上「新增待辦」開始 ✏️</div>`;
-      renderProg(); return;
-    }
-    let html='';
-    for(const m of monthsInData()){
-      const list=ITEMS.filter(i=>(i.month||'7月')===m);
-      const done=list.filter(i=>st(i)==='done').length;
-      html+=`<div class="mgroup"><div class="mico"><i data-lucide="calendar"></i></div>
-        <div class="mname">${esc(m)}待辦事項</div><div class="mcnt">${done}/${list.length}</div></div>`;
-      html+=`<div class="mlist">${list.map(card).join('')}</div>`;
-    }
-    document.getElementById('list').innerHTML=html;
+    document.getElementById('list').innerHTML = ITEMS.length
+      ? ITEMS.map(card).join('')
+      : `<div style="text-align:center;color:var(--sub);padding:30px">尚無待辦，點右上「新增待辦」開始 ✏️</div>`;
     bind(); if(window.lucide) lucide.createIcons(); renderProg();
   }
   function renderProg(){
@@ -261,49 +207,34 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
   }
   async function cycle(id,el){
     const it=ITEMS.find(x=>x.id===id); if(!it)return;
-    const prev=st(it), ns=NEXT()[prev];
-    setLocal(it,el,ns);
-    const body = HAS_STATUS ? {status:ns,done:ns==='done'} : {done:ns==='done'};
-    const r=await fetch(API+'?id=eq.'+id,{method:'PATCH',headers:H,body:JSON.stringify(body)});
+    const prev=st(it), ns=NEXT[prev]; setLocal(it,el,ns);
+    const r=await fetch(API+'?id=eq.'+id,{method:'PATCH',headers:H,body:JSON.stringify({status:ns,done:ns==='done'})});
     if(!r.ok){ setLocal(it,el,prev); alert('同步失敗，請重試'); }
   }
   function setLocal(it,el,s){
-    it.status=s; it.done=(s==='done');
-    el.className='todo s-'+s;
+    it.status=s; it.done=(s==='done'); el.className='todo s-'+s;
     const b=el.querySelector('.badge'); if(b){ b.className='badge '+STATUS[s].cls; b.textContent=STATUS[s].label; }
     renderProg();
   }
 
   const modal=document.getElementById('modal');
-  function buildMonthOptions(){
-    const base=['7月','8月','9月','10月','11月','12月'];
-    const set=[...new Set([...monthsInData(),...base])].sort((a,b)=>monthNum(a)-monthNum(b));
-    const sel=document.getElementById('f-month');
-    if(sel) sel.innerHTML=set.map(m=>`<option>${m}</option>`).join('');
-  }
   function openAdd(){ editingId=null;
     document.getElementById('mtitle').innerHTML='<i data-lucide="plus"></i>新增待辦';
     document.getElementById('f-task').value=''; document.getElementById('f-note').value='';
-    document.getElementById('f-status').value='todo';
-    document.getElementById('f-month').value=(monthsInData()[0]||'7月');
-    document.getElementById('f-date').value='';
+    document.getElementById('f-status').value='todo'; document.getElementById('f-date').value='';
     document.getElementById('m-del').style.display='none'; modal.classList.add('show'); if(window.lucide)lucide.createIcons();
   }
   function openEdit(id){ const it=ITEMS.find(x=>x.id===id); if(!it)return; editingId=id;
     document.getElementById('mtitle').innerHTML='<i data-lucide="pencil"></i>編輯待辦';
     document.getElementById('f-task').value=it.task; document.getElementById('f-note').value=it.note||'';
-    document.getElementById('f-status').value=st(it);
-    document.getElementById('f-month').value=it.month||'7月';
-    document.getElementById('f-date').value=it.due_date||'';
+    document.getElementById('f-status').value=st(it); document.getElementById('f-date').value=it.due_date||'';
     document.getElementById('m-del').style.display='inline-flex'; modal.classList.add('show'); if(window.lucide)lucide.createIcons();
   }
   function close(){ modal.classList.remove('show'); }
   async function save(){
     const s=document.getElementById('f-status').value;
     const payload={ task:document.getElementById('f-task').value.trim(), note:document.getElementById('f-note').value.trim()||null,
-      done:(s==='done'), month:document.getElementById('f-month').value,
-      due_date:document.getElementById('f-date').value||null };
-    if(HAS_STATUS) payload.status=s;   // 無欄位時不送 status，避免 400
+      status:s, done:(s==='done'), due_date:document.getElementById('f-date').value||null };
     if(!payload.task){ alert('請輸入待辦事項'); return; }
     let r;
     if(editingId){ r=await fetch(API+'?id=eq.'+editingId,{method:'PATCH',headers:{...H,Prefer:'return=representation'},body:JSON.stringify(payload)}); }
