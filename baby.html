@@ -38,7 +38,8 @@
   .prog-bar{height:9px;border-radius:99px;background:rgba(255,255,255,.25);margin:9px 0 0;overflow:hidden}
   .prog-fill{height:100%;border-radius:99px;background:#fff;width:0;transition:width .5s cubic-bezier(.4,0,.2,1)}
   #progsub{margin-top:11px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
-  .pcount{font-size:12px;font-weight:700;background:rgba(255,255,255,.18);border-radius:99px;padding:4px 11px;display:inline-flex;gap:5px;align-items:center}
+  .pcount{font-size:12px;font-weight:700;background:rgba(255,255,255,.18);border-radius:99px;padding:5px 12px;display:inline-flex;gap:5px;align-items:center;cursor:pointer;transition:.15s}
+  .pcount:hover{background:rgba(255,255,255,.32)}
   .pcount i{width:8px;height:8px;border-radius:3px;display:inline-block}
 
   .bar{position:sticky;top:0;z-index:40;background:rgba(238,245,245,.92);backdrop-filter:blur(10px);
@@ -63,7 +64,16 @@
   .gevent:first-of-type{border-top:none}
   .gevent .gdate{font-weight:700;color:var(--accent);font-size:12.5px;min-width:88px;flex-shrink:0}
 
-  .list{margin-top:22px;display:flex;flex-direction:column;gap:12px}
+  .list{margin-top:22px}
+  .mgroup{margin:26px 0 13px;display:flex;align-items:center;gap:11px;scroll-margin-top:70px}
+  .mgroup:first-child{margin-top:4px}
+  .mico{width:36px;height:36px;border-radius:11px;background:#fff;border:1px solid var(--line);
+        display:flex;align-items:center;justify-content:center;color:var(--accent);box-shadow:var(--shadow)}
+  .mico svg{width:19px;height:19px}
+  .mico.s-doing{color:var(--doing)} .mico.s-todo{color:var(--todo)} .mico.s-done{color:var(--done)}
+  .mname{font-size:18px;font-weight:800}
+  .mcnt{margin-left:auto;font-size:12.5px;font-weight:700;color:var(--sub);background:#fff;border:1px solid var(--line);border-radius:99px;padding:3px 12px}
+  .mlist{display:flex;flex-direction:column;gap:12px}
   .todo{position:relative;display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);
         border-radius:16px;padding:16px 16px 16px 18px;box-shadow:var(--shadow);transition:transform .18s,box-shadow .18s,border-color .18s;
         overflow:hidden;animation:rise .34s ease both}
@@ -118,9 +128,16 @@
   .btn-cancel{background:#eef3f3;color:var(--ink)}
   .btn-del{background:#fdecea;color:#d05a52;padding:12px 13px}
   .btn-del svg{width:16px;height:16px;vertical-align:-3px}
+  #gotop{position:fixed;right:18px;bottom:22px;z-index:60;width:46px;height:46px;border-radius:50%;border:none;
+        background:var(--accent);color:#fff;font-size:22px;cursor:pointer;box-shadow:0 6px 18px rgba(43,157,163,.45);
+        opacity:0;pointer-events:none;transition:opacity .25s,transform .2s}
+  #gotop.show{opacity:1;pointer-events:auto}
+  #gotop:hover{transform:translateY(-3px)}
 </style>
 </head>
 <body>
+<button id="gotop" title="回到頂部" aria-label="回到頂部">↑</button>
+
 <header>
   <div class="inner">
     <div class="tabs">
@@ -194,22 +211,44 @@
     }catch(e){ document.getElementById('status').innerHTML='⚠️ 連線失敗：'+e.message; }
   }
 
+  const SGROUPS=[
+    {key:'doing',label:'處理中',icon:'loader'},
+    {key:'todo', label:'待辦',  icon:'circle'},
+    {key:'done', label:'完成',  icon:'check-circle-2'},
+  ];
+  // 排序：有確定日期者照日期升冪、無日期放最後
+  function todoSort(a,b){
+    const ad=a.due_date||'', bd=b.due_date||'';
+    if(ad && bd) return ad<bd?-1:ad>bd?1:0;
+    if(ad && !bd) return -1;
+    if(!ad && bd) return 1;
+    return ((a.sort_order||0)-(b.sort_order||0)) || (a.id-b.id);
+  }
   function card(it){
-    const s=st(it), sd=STATUS[s];
-    return `<div class="todo s-${s}" data-id="${it.id}">
+    return `<div class="todo s-${st(it)}" data-id="${it.id}">
       <div class="check" data-act="toggle" title="點一下切換狀態"><i data-lucide="check"></i></div>
       <div class="body">
         <div class="task">${esc(it.task)}</div>
-        <div class="tmeta"><span class="badge ${sd.cls}">${sd.label}</span>${it.due_date?`<span class="datepill"><i data-lucide="calendar"></i>${it.due_date}</span>`:''}</div>
+        ${it.due_date?`<div class="tmeta"><span class="datepill"><i data-lucide="calendar"></i>${it.due_date}</span></div>`:''}
         ${it.note?`<div class="note">${esc(it.note)}</div>`:''}
       </div>
       <button class="edit" data-act="edit"><i data-lucide="pencil"></i></button>
     </div>`;
   }
   function render(){
-    document.getElementById('list').innerHTML = ITEMS.length
-      ? ITEMS.map(card).join('')
-      : `<div style="text-align:center;color:var(--sub);padding:30px">尚無待辦，點右上「新增待辦」開始 ✏️</div>`;
+    if(!ITEMS.length){
+      document.getElementById('list').innerHTML=`<div style="text-align:center;color:var(--sub);padding:30px">尚無待辦，點右上「新增待辦」開始 ✏️</div>`;
+      renderProg(); return;
+    }
+    let html='';
+    for(const g of SGROUPS){
+      const list=ITEMS.filter(i=>st(i)===g.key).sort(todoSort);
+      if(!list.length) continue;
+      html+=`<div class="mgroup" id="grp-${g.key}"><div class="mico s-${g.key}"><i data-lucide="${g.icon}"></i></div>
+        <div class="mname">${g.label}</div><div class="mcnt">${list.length}</div></div>`;
+      html+=`<div class="mlist">${list.map(card).join('')}</div>`;
+    }
+    document.getElementById('list').innerHTML=html;
     bind(); if(window.lucide) lucide.createIcons(); renderProg();
   }
   function renderProg(){
@@ -218,9 +257,9 @@
     document.getElementById('pct').textContent=pct+'%';
     document.getElementById('pfill').style.width=pct+'%';
     const sub=document.getElementById('progsub');
-    if(sub) sub.innerHTML=`<span class="pcount"><i style="background:var(--done)"></i>完成 ${d}</span>`+
-      `<span class="pcount"><i style="background:var(--doing)"></i>處理中 ${doing}</span>`+
-      `<span class="pcount"><i style="background:var(--todo)"></i>待辦 ${total-d-doing}</span>`;
+    if(sub) sub.innerHTML=`<span class="pcount" data-grp="doing"><i style="background:var(--doing)"></i>處理中 ${doing}</span>`+
+      `<span class="pcount" data-grp="todo"><i style="background:var(--todo)"></i>待辦 ${total-d-doing}</span>`+
+      `<span class="pcount" data-grp="done"><i style="background:var(--done)"></i>完成 ${d}</span>`;
   }
   function bind(){
     document.querySelectorAll('.todo').forEach(el=>{
@@ -231,14 +270,10 @@
   }
   async function cycle(id,el){
     const it=ITEMS.find(x=>x.id===id); if(!it)return;
-    const prev=st(it), ns=NEXT[prev]; setLocal(it,el,ns);
+    const prev=st(it), ns=NEXT[prev];
+    it.status=ns; it.done=(ns==='done'); render();   // 重繪以移到對應分組
     const r=await fetch(API+'?id=eq.'+id,{method:'PATCH',headers:H,body:JSON.stringify({status:ns,done:ns==='done'})});
-    if(!r.ok){ setLocal(it,el,prev); alert('同步失敗，請重試'); }
-  }
-  function setLocal(it,el,s){
-    it.status=s; it.done=(s==='done'); el.className='todo s-'+s;
-    const b=el.querySelector('.badge'); if(b){ b.className='badge '+STATUS[s].cls; b.textContent=STATUS[s].label; }
-    renderProg();
+    if(!r.ok){ it.status=prev; it.done=(prev==='done'); render(); alert('同步失敗，請重試'); }
   }
 
   const modal=document.getElementById('modal');
@@ -285,6 +320,13 @@
   if(window.lucide) lucide.createIcons();
   load();
 
+  // 點上方膠囊 → 捲動到對應狀態區塊
+  document.getElementById('progsub').addEventListener('click',e=>{
+    const p=e.target.closest('.pcount'); if(!p)return;
+    const el=document.getElementById('grp-'+p.dataset.grp);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+
   // ---- Google 行事曆串接 ----
   const gbtn=document.getElementById('gcal-btn');
   const gsyncBtn=document.getElementById('gcal-sync');
@@ -316,6 +358,12 @@
     }
     alert('已同步 '+ok+' 筆到 Google 行事曆');
   }
+
+  // 回到頂部
+  const _gotop=document.getElementById('gotop');
+  addEventListener('scroll',()=>{_gotop.classList.toggle('show',scrollY>400)});
+  _gotop.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+
 </script>
 </body>
 </html>
