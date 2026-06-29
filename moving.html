@@ -79,7 +79,9 @@
   .b-todo{background:var(--todo-bg);color:#5b6b6c} .b-doing{background:var(--doing-bg);color:#b07d11} .b-done{background:var(--done-bg);color:#1f8f63}
   .todo .body{flex:1;min-width:0}
   .todo .task{font-weight:700;font-size:16px;padding-right:30px;letter-spacing:.2px}
-  .todo .tmeta{margin-top:6px}
+  .todo .tmeta{margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .datepill{font-size:11px;font-weight:700;color:#3a63c4;background:#e8eefc;border-radius:7px;padding:3px 9px;display:inline-flex;align-items:center;gap:4px}
+  .datepill svg{width:12px;height:12px}
   .todo.s-done .task{text-decoration:line-through;text-decoration-color:var(--sub);color:var(--sub)}
   .todo .note{font-size:13px;color:#5a7173;margin-top:7px;background:#f3f9f9;border:1px solid #e4f0f0;border-radius:10px;padding:8px 10px;line-height:1.55;white-space:pre-wrap}
   .edit{position:absolute;top:13px;right:13px;border:none;background:none;color:#aebebe;cursor:pointer;padding:4px;border-radius:8px;transition:.15s}
@@ -157,6 +159,7 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
         <option value="todo">待辦</option><option value="doing">處理中</option><option value="done">完成</option>
       </select></div>
     </div>
+    <div class="field"><label>日期（選填 · 用於行事曆）</label><input id="f-date" type="date"></div>
     <div class="field"><label>備註（選填）</label><textarea id="f-note" placeholder="日期、電話、報價、提醒…"></textarea></div>
     <div class="actions">
       <button class="btn-save" id="m-save">儲存</button>
@@ -214,7 +217,7 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
       <div class="check" data-act="toggle" title="點一下切換狀態"><i data-lucide="check"></i></div>
       <div class="body">
         <div class="task">${esc(it.task)}</div>
-        <div class="tmeta"><span class="badge ${sd.cls}">${sd.label}</span></div>
+        <div class="tmeta"><span class="badge ${sd.cls}">${sd.label}</span>${it.due_date?`<span class="datepill"><i data-lucide="calendar"></i>${it.due_date}</span>`:''}</div>
         ${it.note?`<div class="note">${esc(it.note)}</div>`:''}
       </div>
       <button class="edit" data-act="edit"><i data-lucide="pencil"></i></button>
@@ -282,6 +285,7 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
     document.getElementById('f-task').value=''; document.getElementById('f-note').value='';
     document.getElementById('f-status').value='todo';
     document.getElementById('f-month').value=(monthsInData()[0]||'7月');
+    document.getElementById('f-date').value='';
     document.getElementById('m-del').style.display='none'; modal.classList.add('show'); if(window.lucide)lucide.createIcons();
   }
   function openEdit(id){ const it=ITEMS.find(x=>x.id===id); if(!it)return; editingId=id;
@@ -289,13 +293,15 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
     document.getElementById('f-task').value=it.task; document.getElementById('f-note').value=it.note||'';
     document.getElementById('f-status').value=st(it);
     document.getElementById('f-month').value=it.month||'7月';
+    document.getElementById('f-date').value=it.due_date||'';
     document.getElementById('m-del').style.display='inline-flex'; modal.classList.add('show'); if(window.lucide)lucide.createIcons();
   }
   function close(){ modal.classList.remove('show'); }
   async function save(){
     const s=document.getElementById('f-status').value;
     const payload={ task:document.getElementById('f-task').value.trim(), note:document.getElementById('f-note').value.trim()||null,
-      done:(s==='done'), month:document.getElementById('f-month').value };
+      done:(s==='done'), month:document.getElementById('f-month').value,
+      due_date:document.getElementById('f-date').value||null };
     if(HAS_STATUS) payload.status=s;   // 無欄位時不送 status，避免 400
     if(!payload.task){ alert('請輸入待辦事項'); return; }
     let r;
