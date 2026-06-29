@@ -140,17 +140,11 @@
 
 <div class="bar">
   <button class="gcalbtn" id="gcal-btn"><i data-lucide="calendar"></i>連結 Google 行事曆</button>
+  <button class="gcalbtn" id="gcal-sync" style="display:none"><i data-lucide="refresh-cw"></i>同步處理中待辦</button>
   <button class="addbtn" id="addbtn"><i data-lucide="plus"></i>新增待辦</button>
 </div>
 
 <div class="wrap">
-  <div class="gpanel" id="gcal-panel" style="display:none">
-    <div class="ghead"><i data-lucide="calendar-check"></i>近期行事曆
-      <button class="gsync" id="gcal-sync"><i data-lucide="refresh-cw"></i>同步處理中待辦</button>
-    </div>
-    <div class="ghint">把「處理中且有日期」的待辦同步到你的 Google 行事曆</div>
-    <div id="gcal-events"></div>
-  </div>
   <div id="status">載入中…</div>
   <div class="list" id="list"></div>
   <footer>寶寶待辦 · 資料同步於 Supabase</footer>
@@ -176,7 +170,7 @@
 </div>
 
 <script src="https://accounts.google.com/gsi/client" async></script>
-<script src="gcal.js?v=3"></script>
+<script src="gcal.js?v=4"></script>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script>
   const SB_URL='https://veasxxuveykxycstcnfn.supabase.co';
@@ -293,27 +287,17 @@
 
   // ---- Google 行事曆串接 ----
   const gbtn=document.getElementById('gcal-btn');
-  const gpanel=document.getElementById('gcal-panel');
+  const gsyncBtn=document.getElementById('gcal-sync');
   function gUI(connected){
     if(connected){ gbtn.innerHTML='<i data-lucide="calendar-check"></i>行事曆已連結'; gbtn.classList.add('on');
-      gpanel.style.display='block'; refreshGcal(); }
-    else { gbtn.innerHTML='<i data-lucide="calendar"></i>連結 Google 行事曆'; gbtn.classList.remove('on'); gpanel.style.display='none'; }
+      gsyncBtn.style.display='inline-flex'; }
+    else { gbtn.innerHTML='<i data-lucide="calendar"></i>連結 Google 行事曆'; gbtn.classList.remove('on'); gsyncBtn.style.display='none'; }
     if(window.lucide) lucide.createIcons();
   }
   GCAL.init(gUI);
   gbtn.addEventListener('click',()=>{ if(!GCAL.connected()) GCAL.connect(); });
-  document.getElementById('gcal-sync').addEventListener('click',syncDoing);
+  gsyncBtn.addEventListener('click',syncDoing);
 
-  async function refreshGcal(){
-    const box=document.getElementById('gcal-events');
-    try{
-      const evs=await GCAL.listUpcoming(8);
-      box.innerHTML = evs.length ? evs.map(e=>{
-        const when=(e.start.date||e.start.dateTime||'').slice(0,10);
-        return `<div class="gevent"><span class="gdate">${when}</span><span>${esc(e.summary||'(無標題)')}</span></div>`;
-      }).join('') : '<div style="color:var(--sub);font-size:13px">近期沒有行程</div>';
-    }catch(e){ box.innerHTML='<div style="color:var(--sub);font-size:13px">'+esc(e.message)+'</div>'; }
-  }
   async function syncDoing(){
     if(!GCAL.connected()){ GCAL.connect(); return; }
     const targets=ITEMS.filter(i=> st(i)==='doing' && i.due_date);
@@ -331,7 +315,6 @@
       }catch(e){ console.warn(e); }
     }
     alert('已同步 '+ok+' 筆到 Google 行事曆');
-    refreshGcal();
   }
 </script>
 </body>

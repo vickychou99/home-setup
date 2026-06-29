@@ -21,11 +21,11 @@ window.GCAL = (function(){
         callback:(resp)=>{ if(resp && resp.access_token){ token=resp.access_token; saveTok(token, resp.expires_in); onChange&&onChange(true); } },
         error_callback:()=>{ onChange&&onChange(false); }   // 靜默授權失敗：維持未連結，不彈錯
       });
-      // 1) 先用本機儲存的權杖（1 小時內免重連）
+      // 用本機儲存的權杖（1 小時內免重連、切換頁面也保持連結）
       const t=loadTok();
-      if(t){ token=t; onChange&&onChange(true); return; }
-      // 2) 嘗試「靜默」重新授權（已登入＋授權過 → 不彈窗）
-      try{ tokenClient.requestAccessToken({prompt:''}); }catch(e){ onChange&&onChange(false); }
+      if(t){ token=t; onChange&&onChange(true); }
+      else { onChange&&onChange(false); }
+      // 不在載入時自動彈窗（會被瀏覽器擋）；授權只在使用者點「連結」時觸發
     });
   }
   function connect(){ if(tokenClient) tokenClient.requestAccessToken({prompt: token?'':'consent'}); }

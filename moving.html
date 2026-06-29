@@ -72,6 +72,8 @@
   .mico svg{width:19px;height:19px}
   .mname{font-size:18px;font-weight:800}
   .mcnt{margin-left:auto;font-size:12.5px;font-weight:700;color:var(--sub);background:#fff;border:1px solid var(--line);border-radius:99px;padding:3px 12px}
+  .mico.s-doing{color:var(--doing)} .mico.s-todo{color:var(--todo)} .mico.s-done{color:var(--done)}
+  .mpill{font-size:11px;font-weight:700;color:var(--sub);background:#f1f6f6;border-radius:7px;padding:3px 9px}
   .mlist{display:flex;flex-direction:column;gap:12px}
   .todo{position:relative;display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);
         border-radius:16px;padding:16px 16px 16px 18px;box-shadow:var(--shadow);transition:transform .18s,box-shadow .18s,border-color .18s;
@@ -151,17 +153,11 @@
 
 <div class="bar">
   <button class="gcalbtn" id="gcal-btn"><i data-lucide="calendar"></i>連結 Google 行事曆</button>
+  <button class="gcalbtn" id="gcal-sync" style="display:none"><i data-lucide="refresh-cw"></i>同步處理中待辦</button>
   <button class="addbtn" id="addbtn"><i data-lucide="plus"></i>新增待辦</button>
 </div>
 
 <div class="wrap">
-  <div class="gpanel" id="gcal-panel" style="display:none">
-    <div class="ghead"><i data-lucide="calendar-check"></i>近期行事曆
-      <button class="gsync" id="gcal-sync"><i data-lucide="refresh-cw"></i>同步處理中待辦</button>
-    </div>
-    <div class="ghint">把「處理中且有日期」的待辦同步到你的 Google 行事曆</div>
-    <div id="gcal-events"></div>
-  </div>
   <div id="sqlhint" style="display:none;margin-top:18px;background:#fff7e6;border:1px solid #f3e0b0;border-radius:14px;padding:14px 16px;font-size:13px;color:#8a6d1f;line-height:1.6">
     💡 想啟用「處理中」狀態，請到 Supabase → SQL Editor 執行一次：<br>
     <code style="display:block;background:#fff;border:1px solid #efe2c0;border-radius:8px;padding:8px 10px;margin-top:7px;font-size:12px;color:#5a4a16;white-space:pre-wrap">alter table moving_todos add column status text not null default 'todo';
@@ -194,7 +190,7 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
 </div>
 
 <script src="https://accounts.google.com/gsi/client" async></script>
-<script src="gcal.js?v=3"></script>
+<script src="gcal.js?v=4"></script>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script>
   const SB_URL='https://veasxxuveykxycstcnfn.supabase.co';
@@ -243,7 +239,7 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
       <div class="check" data-act="toggle" title="點一下切換狀態"><i data-lucide="check"></i></div>
       <div class="body">
         <div class="task">${esc(it.task)}</div>
-        <div class="tmeta"><span class="badge ${sd.cls}">${sd.label}</span>${it.due_date?`<span class="datepill"><i data-lucide="calendar"></i>${it.due_date}</span>`:''}</div>
+        <div class="tmeta">${it.month?`<span class="mpill">${esc(it.month)}</span>`:''}${it.due_date?`<span class="datepill"><i data-lucide="calendar"></i>${it.due_date}</span>`:''}</div>
         ${it.note?`<div class="note">${esc(it.note)}</div>`:''}
       </div>
       <button class="edit" data-act="edit"><i data-lucide="pencil"></i></button>
@@ -254,17 +250,22 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
   function monthsInData(){
     return [...new Set(ITEMS.map(i=>i.month||'7月'))].sort((a,b)=>monthNum(a)-monthNum(b));
   }
+  const SGROUPS=[
+    {key:'doing',label:'處理中',icon:'loader'},
+    {key:'todo', label:'待辦',  icon:'circle'},
+    {key:'done', label:'完成',  icon:'check-circle-2'},
+  ];
   function render(){
     if(!ITEMS.length){
       document.getElementById('list').innerHTML=`<div style="text-align:center;color:var(--sub);padding:30px">尚無待辦，點右上「新增待辦」開始 ✏️</div>`;
       renderProg(); return;
     }
     let html='';
-    for(const m of monthsInData()){
-      const list=ITEMS.filter(i=>(i.month||'7月')===m);
-      const done=list.filter(i=>st(i)==='done').length;
-      html+=`<div class="mgroup"><div class="mico"><i data-lucide="calendar"></i></div>
-        <div class="mname">${esc(m)}待辦事項</div><div class="mcnt">${done}/${list.length}</div></div>`;
+    for(const g of SGROUPS){
+      const list=ITEMS.filter(i=>st(i)===g.key);
+      if(!list.length) continue;
+      html+=`<div class="mgroup"><div class="mico s-${g.key}"><i data-lucide="${g.icon}"></i></div>
+        <div class="mname">${g.label}</div><div class="mcnt">${list.length}</div></div>`;
       html+=`<div class="mlist">${list.map(card).join('')}</div>`;
     }
     document.getElementById('list').innerHTML=html;
@@ -290,16 +291,10 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
   async function cycle(id,el){
     const it=ITEMS.find(x=>x.id===id); if(!it)return;
     const prev=st(it), ns=NEXT()[prev];
-    setLocal(it,el,ns);
+    it.status=ns; it.done=(ns==='done'); render();   // 重繪以移到對應分組
     const body = HAS_STATUS ? {status:ns,done:ns==='done'} : {done:ns==='done'};
     const r=await fetch(API+'?id=eq.'+id,{method:'PATCH',headers:H,body:JSON.stringify(body)});
-    if(!r.ok){ setLocal(it,el,prev); alert('同步失敗，請重試'); }
-  }
-  function setLocal(it,el,s){
-    it.status=s; it.done=(s==='done');
-    el.className='todo s-'+s;
-    const b=el.querySelector('.badge'); if(b){ b.className='badge '+STATUS[s].cls; b.textContent=STATUS[s].label; }
-    renderProg();
+    if(!r.ok){ it.status=prev; it.done=(prev==='done'); render(); alert('同步失敗，請重試'); }
   }
 
   const modal=document.getElementById('modal');
@@ -360,27 +355,17 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
 
   // ---- Google 行事曆串接 ----
   const gbtn=document.getElementById('gcal-btn');
-  const gpanel=document.getElementById('gcal-panel');
+  const gsyncBtn=document.getElementById('gcal-sync');
   function gUI(connected){
     if(connected){ gbtn.innerHTML='<i data-lucide="calendar-check"></i>行事曆已連結'; gbtn.classList.add('on');
-      gpanel.style.display='block'; refreshGcal(); }
-    else { gbtn.innerHTML='<i data-lucide="calendar"></i>連結 Google 行事曆'; gbtn.classList.remove('on'); gpanel.style.display='none'; }
+      gsyncBtn.style.display='inline-flex'; }
+    else { gbtn.innerHTML='<i data-lucide="calendar"></i>連結 Google 行事曆'; gbtn.classList.remove('on'); gsyncBtn.style.display='none'; }
     if(window.lucide) lucide.createIcons();
   }
   GCAL.init(gUI);
   gbtn.addEventListener('click',()=>{ if(!GCAL.connected()) GCAL.connect(); });
-  document.getElementById('gcal-sync').addEventListener('click',syncDoing);
+  gsyncBtn.addEventListener('click',syncDoing);
 
-  async function refreshGcal(){
-    const box=document.getElementById('gcal-events');
-    try{
-      const evs=await GCAL.listUpcoming(8);
-      box.innerHTML = evs.length ? evs.map(e=>{
-        const when=(e.start.date||e.start.dateTime||'').slice(0,10);
-        return `<div class="gevent"><span class="gdate">${when}</span><span>${esc(e.summary||'(無標題)')}</span></div>`;
-      }).join('') : '<div style="color:var(--sub);font-size:13px">近期沒有行程</div>';
-    }catch(e){ box.innerHTML='<div style="color:var(--sub);font-size:13px">'+esc(e.message)+'</div>'; }
-  }
   async function syncDoing(){
     if(!GCAL.connected()){ GCAL.connect(); return; }
     const targets=ITEMS.filter(i=> st(i)==='doing' && i.due_date);
@@ -398,7 +383,6 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
       }catch(e){ console.warn(e); }
     }
     alert('已同步 '+ok+' 筆到 Google 行事曆');
-    refreshGcal();
   }
 </script>
 </body>
