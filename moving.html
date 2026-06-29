@@ -49,7 +49,15 @@
   .addbtn:hover{transform:translateY(-1px)}
   .addbtn svg{width:15px;height:15px}
 
-  .list{margin-top:22px;display:flex;flex-direction:column;gap:12px}
+  .list{margin-top:22px}
+  .mgroup{margin:26px 0 13px;display:flex;align-items:center;gap:11px}
+  .mgroup:first-child{margin-top:4px}
+  .mico{width:36px;height:36px;border-radius:11px;background:#fff;border:1px solid var(--line);
+        display:flex;align-items:center;justify-content:center;color:var(--accent);box-shadow:var(--shadow)}
+  .mico svg{width:19px;height:19px}
+  .mname{font-size:18px;font-weight:800}
+  .mcnt{margin-left:auto;font-size:12.5px;font-weight:700;color:var(--sub);background:#fff;border:1px solid var(--line);border-radius:99px;padding:3px 12px}
+  .mlist{display:flex;flex-direction:column;gap:12px}
   .todo{position:relative;display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);
         border-radius:16px;padding:16px 16px 16px 18px;box-shadow:var(--shadow);transition:transform .18s,box-shadow .18s,border-color .18s;
         overflow:hidden;animation:rise .34s ease both}
@@ -96,6 +104,7 @@
   .field input,.field textarea{width:100%;font:inherit;font-size:14px;padding:10px 12px;border:1.5px solid var(--line);border-radius:11px;background:#f7fbfb;color:var(--ink);transition:.15s}
   .field input:focus,.field textarea:focus{outline:none;border-color:var(--accent);background:#fff}
   .field textarea{min-height:64px;resize:vertical}
+  .row2{display:flex;gap:10px}.row2>*{flex:1}
   .actions{display:flex;gap:9px;margin-top:20px;align-items:center}
   .actions button{font:inherit;font-weight:800;font-size:14px;padding:12px 16px;border-radius:13px;cursor:pointer;border:none;transition:.15s}
   .btn-save{background:linear-gradient(135deg,#2b9da3,#46c0b8);color:#fff;flex:1;box-shadow:0 3px 10px rgba(43,157,163,.3)}
@@ -142,9 +151,12 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
   <div class="sheet">
     <h3 id="mtitle"><i data-lucide="plus"></i>新增待辦</h3>
     <div class="field"><label>待辦事項</label><input id="f-task" placeholder="例：找搬家公司、預約搬家"></div>
-    <div class="field"><label>狀態</label><select id="f-status" style="width:100%;font:inherit;font-size:14px;padding:10px 12px;border:1.5px solid var(--line);border-radius:11px;background:#f7fbfb;color:var(--ink)">
-      <option value="todo">待辦</option><option value="doing">處理中</option><option value="done">完成</option>
-    </select></div>
+    <div class="row2">
+      <div class="field"><label>月份</label><select id="f-month" style="width:100%;font:inherit;font-size:14px;padding:10px 12px;border:1.5px solid var(--line);border-radius:11px;background:#f7fbfb;color:var(--ink)"></select></div>
+      <div class="field"><label>狀態</label><select id="f-status" style="width:100%;font:inherit;font-size:14px;padding:10px 12px;border:1.5px solid var(--line);border-radius:11px;background:#f7fbfb;color:var(--ink)">
+        <option value="todo">待辦</option><option value="doing">處理中</option><option value="done">完成</option>
+      </select></div>
+    </div>
     <div class="field"><label>備註（選填）</label><textarea id="f-note" placeholder="日期、電話、報價、提醒…"></textarea></div>
     <div class="actions">
       <button class="btn-save" id="m-save">儲存</button>
@@ -185,6 +197,7 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
       const r=await fetch(API+'?select=*&order=sort_order,id',{headers:H});
       if(!r.ok) throw new Error(r.status);
       ITEMS=await r.json();
+      buildMonthOptions();
       document.getElementById('status').style.display='none';
       document.getElementById('sqlhint').style.display=HAS_STATUS?'none':'block';
       const doingOpt=document.querySelector('#f-status option[value="doing"]');
@@ -208,10 +221,24 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
     </div>`;
   }
 
+  function monthNum(m){ const n=parseInt(m); return isNaN(n)?99:n; }
+  function monthsInData(){
+    return [...new Set(ITEMS.map(i=>i.month||'7月'))].sort((a,b)=>monthNum(a)-monthNum(b));
+  }
   function render(){
-    document.getElementById('list').innerHTML = ITEMS.length
-      ? ITEMS.map(card).join('')
-      : `<div style="text-align:center;color:var(--sub);padding:30px">尚無待辦，點右上「新增待辦」開始 ✏️</div>`;
+    if(!ITEMS.length){
+      document.getElementById('list').innerHTML=`<div style="text-align:center;color:var(--sub);padding:30px">尚無待辦，點右上「新增待辦」開始 ✏️</div>`;
+      renderProg(); return;
+    }
+    let html='';
+    for(const m of monthsInData()){
+      const list=ITEMS.filter(i=>(i.month||'7月')===m);
+      const done=list.filter(i=>st(i)==='done').length;
+      html+=`<div class="mgroup"><div class="mico"><i data-lucide="calendar"></i></div>
+        <div class="mname">${esc(m)}待辦事項</div><div class="mcnt">${done}/${list.length}</div></div>`;
+      html+=`<div class="mlist">${list.map(card).join('')}</div>`;
+    }
+    document.getElementById('list').innerHTML=html;
     bind(); if(window.lucide) lucide.createIcons(); renderProg();
   }
   function renderProg(){
@@ -244,23 +271,31 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
   }
 
   const modal=document.getElementById('modal');
+  function buildMonthOptions(){
+    const base=['7月','8月','9月','10月','11月','12月'];
+    const set=[...new Set([...monthsInData(),...base])].sort((a,b)=>monthNum(a)-monthNum(b));
+    const sel=document.getElementById('f-month');
+    if(sel) sel.innerHTML=set.map(m=>`<option>${m}</option>`).join('');
+  }
   function openAdd(){ editingId=null;
     document.getElementById('mtitle').innerHTML='<i data-lucide="plus"></i>新增待辦';
     document.getElementById('f-task').value=''; document.getElementById('f-note').value='';
     document.getElementById('f-status').value='todo';
+    document.getElementById('f-month').value=(monthsInData()[0]||'7月');
     document.getElementById('m-del').style.display='none'; modal.classList.add('show'); if(window.lucide)lucide.createIcons();
   }
   function openEdit(id){ const it=ITEMS.find(x=>x.id===id); if(!it)return; editingId=id;
     document.getElementById('mtitle').innerHTML='<i data-lucide="pencil"></i>編輯待辦';
     document.getElementById('f-task').value=it.task; document.getElementById('f-note').value=it.note||'';
     document.getElementById('f-status').value=st(it);
+    document.getElementById('f-month').value=it.month||'7月';
     document.getElementById('m-del').style.display='inline-flex'; modal.classList.add('show'); if(window.lucide)lucide.createIcons();
   }
   function close(){ modal.classList.remove('show'); }
   async function save(){
     const s=document.getElementById('f-status').value;
     const payload={ task:document.getElementById('f-task').value.trim(), note:document.getElementById('f-note').value.trim()||null,
-      done:(s==='done') };
+      done:(s==='done'), month:document.getElementById('f-month').value };
     if(HAS_STATUS) payload.status=s;   // 無欄位時不送 status，避免 400
     if(!payload.task){ alert('請輸入待辦事項'); return; }
     let r;
