@@ -38,7 +38,8 @@
   .prog-bar{height:9px;border-radius:99px;background:rgba(255,255,255,.25);margin:9px 0 0;overflow:hidden}
   .prog-fill{height:100%;border-radius:99px;background:#fff;width:0;transition:width .5s cubic-bezier(.4,0,.2,1)}
   #progsub{margin-top:11px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
-  .pcount{font-size:12px;font-weight:700;background:rgba(255,255,255,.18);border-radius:99px;padding:4px 11px;display:inline-flex;gap:5px;align-items:center}
+  .pcount{font-size:12px;font-weight:700;background:rgba(255,255,255,.18);border-radius:99px;padding:5px 12px;display:inline-flex;gap:5px;align-items:center;cursor:pointer;transition:.15s}
+  .pcount:hover{background:rgba(255,255,255,.32)}
   .pcount i{width:8px;height:8px;border-radius:3px;display:inline-block}
 
   .bar{position:sticky;top:0;z-index:40;background:rgba(238,245,245,.92);backdrop-filter:blur(10px);
@@ -68,7 +69,7 @@
   .gevent .gdate{font-weight:700;color:var(--accent);font-size:12.5px;min-width:88px;flex-shrink:0}
 
   .list{margin-top:22px}
-  .mgroup{margin:26px 0 13px;display:flex;align-items:center;gap:11px}
+  .mgroup{margin:26px 0 13px;display:flex;align-items:center;gap:11px;scroll-margin-top:70px}
   .mgroup:first-child{margin-top:4px}
   .mico{width:36px;height:36px;border-radius:11px;background:#fff;border:1px solid var(--line);
         display:flex;align-items:center;justify-content:center;color:var(--accent);box-shadow:var(--shadow)}
@@ -258,6 +259,14 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
     {key:'todo', label:'待辦',  icon:'circle'},
     {key:'done', label:'完成',  icon:'check-circle-2'},
   ];
+  // 排序：有日期→照日期升冪；無日期放最後，再依發生月份；同月再依原順序
+  function todoSort(a,b){
+    const ad=a.due_date||'', bd=b.due_date||'';
+    if(ad && bd) return ad<bd?-1:ad>bd?1:0;
+    if(ad && !bd) return -1;
+    if(!ad && bd) return 1;
+    return (monthNum(a.month)-monthNum(b.month)) || ((a.sort_order||0)-(b.sort_order||0)) || (a.id-b.id);
+  }
   function render(){
     if(!ITEMS.length){
       document.getElementById('list').innerHTML=`<div style="text-align:center;color:var(--sub);padding:30px">尚無待辦，點右上「新增待辦」開始 ✏️</div>`;
@@ -265,9 +274,9 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
     }
     let html='';
     for(const g of SGROUPS){
-      const list=ITEMS.filter(i=>st(i)===g.key);
+      const list=ITEMS.filter(i=>st(i)===g.key).sort(todoSort);
       if(!list.length) continue;
-      html+=`<div class="mgroup"><div class="mico s-${g.key}"><i data-lucide="${g.icon}"></i></div>
+      html+=`<div class="mgroup" id="grp-${g.key}"><div class="mico s-${g.key}"><i data-lucide="${g.icon}"></i></div>
         <div class="mname">${g.label}</div><div class="mcnt">${list.length}</div></div>`;
       html+=`<div class="mlist">${list.map(card).join('')}</div>`;
     }
@@ -280,9 +289,9 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
     document.getElementById('pct').textContent=pct+'%';
     document.getElementById('pfill').style.width=pct+'%';
     const sub=document.getElementById('progsub');
-    if(sub) sub.innerHTML=`<span class="pcount"><i style="background:var(--done)"></i>完成 ${d}</span>`+
-      `<span class="pcount"><i style="background:var(--doing)"></i>處理中 ${doing}</span>`+
-      `<span class="pcount"><i style="background:var(--todo)"></i>待辦 ${total-d-doing}</span>`;
+    if(sub) sub.innerHTML=`<span class="pcount" data-grp="doing"><i style="background:var(--doing)"></i>處理中 ${doing}</span>`+
+      `<span class="pcount" data-grp="todo"><i style="background:var(--todo)"></i>待辦 ${total-d-doing}</span>`+
+      `<span class="pcount" data-grp="done"><i style="background:var(--done)"></i>完成 ${d}</span>`;
   }
   function bind(){
     document.querySelectorAll('.todo').forEach(el=>{
@@ -355,6 +364,13 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
 
   if(window.lucide) lucide.createIcons();
   load();
+
+  // 點上方膠囊 → 捲動到對應狀態區塊
+  document.getElementById('progsub').addEventListener('click',e=>{
+    const p=e.target.closest('.pcount'); if(!p)return;
+    const el=document.getElementById('grp-'+p.dataset.grp);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  });
 
   // ---- Google 行事曆串接 ----
   const gbtn=document.getElementById('gcal-btn');
