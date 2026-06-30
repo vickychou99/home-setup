@@ -93,7 +93,7 @@
   .item .body{flex:1;min-width:0}
   .item .nm{font-weight:700;font-size:15.5px;padding-right:30px;letter-spacing:.2px}
   .item .meta{font-size:12px;color:var(--sub);margin-top:5px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-  .item .note{font-size:12.5px;color:#5a7173;margin-top:8px;background:#f3f9f9;border:1px solid #e4f0f0;border-radius:10px;padding:8px 10px;line-height:1.55}
+  .item .note{font-size:12.5px;color:#5a7173;margin-top:8px;background:#f3f9f9;border:1px solid #e4f0f0;border-radius:10px;padding:8px 10px;line-height:1.55;white-space:pre-wrap}
   .badge{font-size:11px;font-weight:800;border-radius:7px;padding:3px 9px;white-space:nowrap}
   .b-own{background:var(--own-bg);color:#5b6b6c} .b-buy{background:var(--buy-bg);color:#1d8087}
   .b-decide{background:var(--decide-bg);color:#b07d11} .b-ordered{background:var(--ordered-bg);color:#1f8f63}
@@ -152,6 +152,7 @@
         opacity:0;pointer-events:none;transition:opacity .25s,transform .2s}
   #gotop.show{opacity:1;pointer-events:auto}
   #gotop:hover{transform:translateY(-3px)}
+  .notelink{color:var(--accent);text-decoration:underline;word-break:break-all}
 </style>
 </head>
 <body>
@@ -247,6 +248,7 @@
     return it.type==='家電'?'plug-zap':'package'; }
   function esc(s){return (s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
   function escNl(s){return esc(s).replace(/\n/g,'<br>');}
+  function linkify(s){const e=t=>(t||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));const re=/(https?:\/\/[^\s]+|www\.[^\s]+)/g;let out='',last=0,m;s=s||'';while((m=re.exec(s))){out+=e(s.slice(last,m.index));let u=m[0],tr='';const tm=u.match(/[)\]\.,;!?，。、！？]+$/);if(tm){tr=tm[0];u=u.slice(0,-tr.length);}const href=u.startsWith('www.')?'https://'+u:u;out+='<a href="'+e(href)+'" target="_blank" rel="noopener" class="notelink" onclick="event.stopPropagation()">'+e(u)+'</a>'+e(tr);last=m.index+m[0].length;}out+=e(s.slice(last));return out;}
 
   async function load(){
     try{
@@ -269,7 +271,7 @@
       <div class="body">
         <div class="nm">${esc(it.name)}</div>
         <div class="meta"><span class="badge ${st.cls}">${st.label}</span><span class="tag2">${it.area}</span><span class="tag2">${it.type}</span></div>
-        ${it.note?`<div class="note">${escNl(it.note)}</div>`:''}
+        ${it.note?`<div class="note">${linkify(it.note)}</div>`:''}
       </div>
       <button class="edit" data-act="edit"><i data-lucide="pencil"></i></button>
     </div>`;

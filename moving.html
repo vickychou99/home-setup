@@ -140,6 +140,7 @@
         opacity:0;pointer-events:none;transition:opacity .25s,transform .2s}
   #gotop.show{opacity:1;pointer-events:auto}
   #gotop:hover{transform:translateY(-3px)}
+  .notelink{color:var(--accent);text-decoration:underline;word-break:break-all}
 </style>
 </head>
 <body>
@@ -216,6 +217,7 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
   const NEXT=()=> HAS_STATUS?NEXT3:NEXT2;
   function st(it){ return it.status || (it.done?'done':'todo'); }  // 相容舊資料
   function esc(s){return (s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+  function linkify(s){const e=t=>(t||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));const re=/(https?:\/\/[^\s]+|www\.[^\s]+)/g;let out='',last=0,m;s=s||'';while((m=re.exec(s))){out+=e(s.slice(last,m.index));let u=m[0],tr='';const tm=u.match(/[)\]\.,;!?，。、！？]+$/);if(tm){tr=tm[0];u=u.slice(0,-tr.length);}const href=u.startsWith('www.')?'https://'+u:u;out+='<a href="'+e(href)+'" target="_blank" rel="noopener" class="notelink" onclick="event.stopPropagation()">'+e(u)+'</a>'+e(tr);last=m.index+m[0].length;}out+=e(s.slice(last));return out;}
 
   function iconFor(t){
     if(/合約|租/.test(t))return 'file-text';
@@ -251,7 +253,7 @@ update moving_todos set status = case when done then 'done' else 'todo' end;</co
       <div class="body">
         <div class="task">${esc(it.task)}</div>
         <div class="tmeta">${it.month?`<span class="mpill">${esc(it.month)}</span>`:''}${it.due_date?`<span class="datepill"><i data-lucide="calendar"></i>${it.due_date}</span>`:''}</div>
-        ${it.note?`<div class="note">${esc(it.note)}</div>`:''}
+        ${it.note?`<div class="note">${linkify(it.note)}</div>`:''}
       </div>
       <button class="edit" data-act="edit"><i data-lucide="pencil"></i></button>
     </div>`;
