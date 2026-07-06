@@ -115,6 +115,27 @@
         border-radius:14px;padding:18px;text-align:center;display:flex;gap:7px;align-items:center;justify-content:center}
   .empty svg{width:16px;height:16px;opacity:.6}
 
+  /* 尺寸表 */
+  #dims{margin:24px 0 4px}
+  #dims summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:11px;user-select:none}
+  #dims summary::-webkit-details-marker{display:none}
+  #dims summary .gico{width:36px;height:36px;border-radius:11px;background:#fff;border:1px solid var(--line);
+        display:flex;align-items:center;justify-content:center;color:var(--accent);box-shadow:var(--shadow)}
+  #dims summary .gico svg{width:19px;height:19px}
+  #dims summary .gname{font-size:18px;font-weight:800}
+  #dims summary .arrow{margin-left:auto;color:var(--sub);transition:transform .2s}
+  #dims[open] summary .arrow{transform:rotate(180deg)}
+  .dimgrid{display:grid;gap:13px;grid-template-columns:1fr 1fr;margin-top:14px}
+  @media(max-width:600px){.dimgrid{grid-template-columns:1fr}}
+  .dimcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 16px;box-shadow:var(--shadow)}
+  .dimcard .dh{display:flex;align-items:center;gap:8px;font-weight:800;font-size:15px;margin-bottom:9px;color:var(--ink)}
+  .dimcard .dh svg{width:17px;height:17px;color:var(--accent)}
+  .dimcard table{width:100%;border-collapse:collapse;font-size:13px}
+  .dimcard td{padding:5px 0;border-bottom:1px dashed #e4f0f0}
+  .dimcard tr:last-child td{border-bottom:none}
+  .dimcard td:first-child{color:var(--sub)}
+  .dimcard td:last-child{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+
   .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--sub);margin:26px 0 0;
         background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 16px;box-shadow:var(--shadow)}
   .legend span{display:inline-flex;align-items:center;gap:6px}
@@ -189,6 +210,55 @@
 </div>
 
 <div class="wrap">
+  <details id="dims" open>
+    <summary>
+      <div class="gico"><i data-lucide="ruler"></i></div>
+      <div class="gname">室內尺寸表</div>
+      <div class="arrow"><i data-lucide="chevron-down"></i></div>
+    </summary>
+    <div class="dimgrid">
+      <div class="dimcard">
+        <div class="dh"><i data-lucide="bed-double"></i>主臥</div>
+        <table>
+          <tr><td>室內</td><td>250 × 300 cm</td></tr>
+          <tr><td>門寬</td><td>75 cm</td></tr>
+        </table>
+      </div>
+      <div class="dimcard">
+        <div class="dh"><i data-lucide="book-open"></i>書房</div>
+        <table>
+          <tr><td>室內</td><td>250 × 195 cm</td></tr>
+        </table>
+      </div>
+      <div class="dimcard">
+        <div class="dh"><i data-lucide="cooking-pot"></i>廚房</div>
+        <table>
+          <tr><td>門寬</td><td>81 cm</td></tr>
+          <tr><td>門高</td><td>210 cm</td></tr>
+          <tr><td>冰箱位　寬</td><td>95 cm</td></tr>
+          <tr><td>冰箱位　深</td><td>67 cm</td></tr>
+        </table>
+      </div>
+      <div class="dimcard">
+        <div class="dh"><i data-lucide="fence"></i>陽台</div>
+        <table>
+          <tr><td>室內</td><td>140 × 205 cm</td></tr>
+          <tr><td>門寬</td><td>70 cm</td></tr>
+          <tr><td>水龍頭高</td><td>116 cm</td></tr>
+          <tr><td>小區塊寬</td><td>88 cm</td></tr>
+        </table>
+      </div>
+      <div class="dimcard">
+        <div class="dh"><i data-lucide="bath"></i>浴室</div>
+        <table>
+          <tr><td>室內</td><td>長 70 × 寬 49 cm</td></tr>
+          <tr><td>門後</td><td>長 60 × 寬 30 cm</td></tr>
+          <tr><td>玻璃門內</td><td>55 × 20 cm</td></tr>
+        </table>
+      </div>
+    </div>
+  </details>
+
   <div id="status">載入中…</div>
   <div id="content"></div>
 
