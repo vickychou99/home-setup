@@ -150,6 +150,10 @@
   .layoutbox[open]>summary .arrow{transform:rotate(180deg)}
   .layoutbox .planwrap{overflow-x:auto;padding-top:6px}
   .layoutbox .planwrap>svg{display:block;width:100%;height:auto;min-width:500px;max-width:600px;margin:0 auto}
+  .layoutbox .planrow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:600px){.layoutbox .planrow{grid-template-columns:1fr}}
+  .layoutbox .planrow .planwrap>svg{min-width:0;max-width:100%}
+  .layoutbox .pcap{font-size:13px;font-weight:800;color:var(--accent);text-align:center;padding:6px 2px 0}
   .layoutbox .plegend{display:flex;gap:15px;flex-wrap:wrap;padding:10px 2px 2px}
   .layoutbox .plegend span{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--sub);font-weight:600}
   .layoutbox .psw{width:14px;height:14px;border-radius:4px;border:1.5px solid;flex-shrink:0}
@@ -344,54 +348,60 @@
     return `<details class="layoutbox" open>
       <summary><div class="lico"><i data-lucide="scan-line"></i></div><div class="lname">擺放示意圖</div><div class="arrow"><i data-lucide="chevron-down"></i></div></summary>
       <div class="planwrap">
-        <svg viewBox="0 0 600 580" role="img" aria-label="客廳沙發、鞋櫃與桌子擺放俯視示意圖，含外圍 500x500 公分">
+        <svg viewBox="0 0 590 520" role="img" aria-label="客廳沙發、鞋櫃與桌子擺放俯視示意圖，含外圍 400x400 公分，入口在鞋櫃左側">
           <defs><pattern id="lgrid" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M50 0 H0 V50" fill="none" stroke="#e6efee" stroke-width="1"/></pattern></defs>
-          <g transform="translate(84,66) scale(0.88)" font-family="-apple-system,'PingFang TC','Noto Sans TC',sans-serif">
-            <rect x="0" y="0" width="500" height="500" fill="url(#lgrid)"/>
-            <rect x="0" y="0" width="500" height="500" fill="none" stroke="#7d928f" stroke-width="3.5" rx="3"/>
-            <text x="384" y="20" font-size="13" font-weight="700" fill="#7d928f">入口側</text>
+          <g transform="translate(80,64) scale(1.05)" font-family="-apple-system,'PingFang TC','Noto Sans TC',sans-serif">
+            <rect x="0" y="0" width="400" height="400" fill="url(#lgrid)"/>
+            <line x1="0" y1="0" x2="18" y2="0" stroke="#7d928f" stroke-width="3.5"/>
+            <line x1="108" y1="0" x2="400" y2="0" stroke="#7d928f" stroke-width="3.5"/>
+            <line x1="400" y1="0" x2="400" y2="400" stroke="#7d928f" stroke-width="3.5"/>
+            <line x1="400" y1="400" x2="0" y2="400" stroke="#7d928f" stroke-width="3.5"/>
+            <line x1="0" y1="400" x2="0" y2="0" stroke="#7d928f" stroke-width="3.5"/>
+            <path d="M108 0 A90 90 0 0 1 18 90" fill="none" stroke="#b0b8b8" stroke-width="1" stroke-dasharray="3 3"/>
+            <line x1="18" y1="0" x2="18" y2="90" stroke="#8a9a98" stroke-width="2"/>
+            <text x="60" y="16" text-anchor="middle" font-size="12" font-weight="700" fill="#7d928f">入口</text>
 
             <g>
-              <rect x="28" y="0" width="32" height="80" rx="2" fill="#e2c091" stroke="#b07d3f" stroke-width="2"/>
-              <line x1="28" y1="40" x2="60" y2="40" stroke="#c79e63" stroke-width="1.5"/>
-              <line x1="31" y1="2" x2="31" y2="78" stroke="#c79e63" stroke-width="1.5"/>
-              <circle cx="35" cy="20" r="1.8" fill="#b07d3f"/><circle cx="35" cy="60" r="1.8" fill="#b07d3f"/>
-              <g transform="translate(46,40) rotate(-90)"><text x="0" y="-1" text-anchor="middle" font-size="12" font-weight="800" fill="#4a3b22">鞋櫃</text><text x="0" y="10" text-anchor="middle" font-size="8" font-weight="600" fill="#4a3b22">玄關櫃</text></g>
+              <rect x="128" y="0" width="32" height="80" rx="2" fill="#e2c091" stroke="#b07d3f" stroke-width="2"/>
+              <line x1="128" y1="40" x2="160" y2="40" stroke="#c79e63" stroke-width="1.5"/>
+              <line x1="131" y1="2" x2="131" y2="78" stroke="#c79e63" stroke-width="1.5"/>
+              <circle cx="135" cy="20" r="1.8" fill="#b07d3f"/><circle cx="135" cy="60" r="1.8" fill="#b07d3f"/>
+              <g transform="translate(146,40) rotate(-90)"><text x="0" y="-1" text-anchor="middle" font-size="12" font-weight="800" fill="#4a3b22">鞋櫃</text><text x="0" y="10" text-anchor="middle" font-size="8" font-weight="600" fill="#4a3b22">玄關櫃</text></g>
             </g>
 
-            <path d="M60 0 H269 V167 H194 V85 H60 Z" fill="#d2e8e6" stroke="#2b9da3" stroke-width="2.5" stroke-linejoin="round"/>
-            <rect x="196" y="2" width="71" height="163" rx="3" fill="#7fc4bf" opacity="0.72"/>
-            <rect x="61" y="1" width="207" height="13" rx="2" fill="#a9d7d3"/>
-            <rect x="61" y="14" width="8" height="70" rx="2" fill="#a9d7d3"/>
-            <line x1="105" y1="15" x2="105" y2="84" stroke="#2b9da3" stroke-width="1" opacity=".5"/>
-            <line x1="149" y1="15" x2="149" y2="84" stroke="#2b9da3" stroke-width="1" opacity=".5"/>
-            <text x="127" y="46" text-anchor="middle" font-size="14" font-weight="800" fill="#22302f">沙發</text>
-            <text x="127" y="58" text-anchor="middle" font-size="9" font-weight="600" fill="#22302f">三人座</text>
-            <text x="231" y="128" text-anchor="middle" font-size="12" font-weight="800" fill="#22302f">貴妃椅</text>
+            <path d="M160 0 H369 V167 H294 V85 H160 Z" fill="#d2e8e6" stroke="#2b9da3" stroke-width="2.5" stroke-linejoin="round"/>
+            <rect x="296" y="2" width="71" height="163" rx="3" fill="#7fc4bf" opacity="0.72"/>
+            <rect x="161" y="1" width="207" height="13" rx="2" fill="#a9d7d3"/>
+            <rect x="161" y="14" width="8" height="70" rx="2" fill="#a9d7d3"/>
+            <line x1="205" y1="15" x2="205" y2="84" stroke="#2b9da3" stroke-width="1" opacity=".5"/>
+            <line x1="249" y1="15" x2="249" y2="84" stroke="#2b9da3" stroke-width="1" opacity=".5"/>
+            <text x="227" y="46" text-anchor="middle" font-size="14" font-weight="800" fill="#22302f">沙發</text>
+            <text x="227" y="58" text-anchor="middle" font-size="9" font-weight="600" fill="#22302f">三人座</text>
+            <text x="331" y="128" text-anchor="middle" font-size="12" font-weight="800" fill="#22302f">貴妃椅</text>
 
-            <rect x="80" y="105" width="100" height="45" rx="5" fill="#ecdcb6" stroke="#bb9a55" stroke-width="2"/>
-            <rect x="86" y="111" width="88" height="33" rx="3" fill="none" stroke="#bb9a55" stroke-width="1" opacity=".55"/>
-            <text x="130" y="124" text-anchor="middle" font-size="12" font-weight="800" fill="#4a3f22">桌子</text>
-            <text x="130" y="135" text-anchor="middle" font-size="8" font-weight="600" fill="#4a3f22">尺寸待確認</text>
+            <rect x="180" y="105" width="100" height="45" rx="5" fill="#ecdcb6" stroke="#bb9a55" stroke-width="2"/>
+            <rect x="186" y="111" width="88" height="33" rx="3" fill="none" stroke="#bb9a55" stroke-width="1" opacity=".55"/>
+            <text x="230" y="124" text-anchor="middle" font-size="12" font-weight="800" fill="#4a3f22">桌子</text>
+            <text x="230" y="135" text-anchor="middle" font-size="8" font-weight="600" fill="#4a3f22">尺寸待確認</text>
 
             <g stroke="#6f8482" stroke-width="1" fill="#6f8482" font-size="12" font-weight="700">
-              <line x1="0" y1="-24" x2="500" y2="-24"/><line x1="0" y1="-30" x2="0" y2="-18"/><line x1="500" y1="-30" x2="500" y2="-18"/>
-              <rect x="176" y="-33" width="148" height="17" rx="4" fill="#ffffff" stroke="none"/><text x="250" y="-21" text-anchor="middle" fill="#22302f">客廳外圍 500（暫定）</text>
-              <line x1="524" y1="0" x2="524" y2="500"/><line x1="518" y1="0" x2="530" y2="0"/><line x1="518" y1="500" x2="530" y2="500"/>
-              <g transform="translate(541,250) rotate(90)"><rect x="-52" y="-9" width="104" height="17" rx="4" fill="#ffffff" stroke="none"/><text x="0" y="4" text-anchor="middle" fill="#22302f">500（暫定）</text></g>
-              <line x1="60" y1="200" x2="269" y2="200"/><line x1="60" y1="195" x2="60" y2="205"/><line x1="269" y1="195" x2="269" y2="205"/>
-              <rect x="130" y="192" width="70" height="16" rx="4" fill="#ffffff" stroke="none"/><text x="165" y="204" text-anchor="middle" fill="#22302f">沙發寬 209</text>
-              <line x1="288" y1="0" x2="288" y2="167"/><line x1="283" y1="0" x2="293" y2="0"/><line x1="283" y1="167" x2="293" y2="167"/>
-              <g transform="translate(303,83) rotate(90)"><rect x="-38" y="-9" width="76" height="16" rx="4" fill="#ffffff" stroke="none"/><text x="0" y="3" text-anchor="middle" fill="#22302f">沙發深 167</text></g>
-              <line x1="194" y1="223" x2="269" y2="223"/><line x1="194" y1="218" x2="194" y2="228"/><line x1="269" y1="218" x2="269" y2="228"/>
-              <rect x="199" y="226" width="66" height="16" rx="4" fill="#ffffff" stroke="none"/><text x="232" y="238" text-anchor="middle" fill="#22302f">貴妃 75</text>
-              <line x1="14" y1="0" x2="14" y2="80"/><line x1="9" y1="0" x2="19" y2="0"/><line x1="9" y1="80" x2="19" y2="80"/>
-              <g transform="translate(2,40) rotate(-90)"><rect x="-26" y="-8" width="52" height="15" rx="4" fill="#ffffff" stroke="none"/><text x="0" y="3" text-anchor="middle" fill="#22302f">鞋 80</text></g>
-              <line x1="28" y1="92" x2="60" y2="92"/><line x1="28" y1="88" x2="28" y2="96"/><line x1="60" y1="88" x2="60" y2="96"/>
-              <rect x="20" y="98" width="48" height="15" rx="4" fill="#ffffff" stroke="none"/><text x="44" y="109" text-anchor="middle" fill="#22302f">深32*</text>
+              <line x1="0" y1="-24" x2="400" y2="-24"/><line x1="0" y1="-30" x2="0" y2="-18"/><line x1="400" y1="-30" x2="400" y2="-18"/>
+              <rect x="126" y="-33" width="148" height="17" rx="4" fill="#ffffff" stroke="none"/><text x="200" y="-21" text-anchor="middle" fill="#22302f">客廳外圍 400（暫定）</text>
+              <line x1="424" y1="0" x2="424" y2="400"/><line x1="418" y1="0" x2="430" y2="0"/><line x1="418" y1="400" x2="430" y2="400"/>
+              <g transform="translate(441,200) rotate(90)"><rect x="-52" y="-9" width="104" height="17" rx="4" fill="#ffffff" stroke="none"/><text x="0" y="4" text-anchor="middle" fill="#22302f">400（暫定）</text></g>
+              <line x1="160" y1="200" x2="369" y2="200"/><line x1="160" y1="195" x2="160" y2="205"/><line x1="369" y1="195" x2="369" y2="205"/>
+              <rect x="230" y="192" width="70" height="16" rx="4" fill="#ffffff" stroke="none"/><text x="265" y="204" text-anchor="middle" fill="#22302f">沙發寬 209</text>
+              <line x1="384" y1="0" x2="384" y2="167"/><line x1="379" y1="0" x2="389" y2="0"/><line x1="379" y1="167" x2="389" y2="167"/>
+              <g transform="translate(398,83) rotate(90)"><rect x="-38" y="-9" width="76" height="16" rx="4" fill="#ffffff" stroke="none"/><text x="0" y="3" text-anchor="middle" fill="#22302f">沙發深 167</text></g>
+              <line x1="294" y1="223" x2="369" y2="223"/><line x1="294" y1="218" x2="294" y2="228"/><line x1="369" y1="218" x2="369" y2="228"/>
+              <rect x="299" y="226" width="66" height="16" rx="4" fill="#ffffff" stroke="none"/><text x="332" y="238" text-anchor="middle" fill="#22302f">貴妃 75</text>
+              <line x1="120" y1="0" x2="120" y2="80"/><line x1="115" y1="0" x2="125" y2="0"/><line x1="115" y1="80" x2="125" y2="80"/>
+              <g transform="translate(108,40) rotate(-90)"><rect x="-26" y="-8" width="52" height="15" rx="4" fill="#ffffff" stroke="none"/><text x="0" y="3" text-anchor="middle" fill="#22302f">鞋 80</text></g>
+              <line x1="128" y1="92" x2="160" y2="92"/><line x1="128" y1="88" x2="128" y2="96"/><line x1="160" y1="88" x2="160" y2="96"/>
+              <rect x="120" y="98" width="48" height="15" rx="4" fill="#ffffff" stroke="none"/><text x="144" y="109" text-anchor="middle" fill="#22302f">深32*</text>
             </g>
 
-            <g transform="translate(300,460)" font-size="12" font-weight="700" fill="#5a6b69">
+            <g transform="translate(150,350)" font-size="12" font-weight="700" fill="#5a6b69">
               <line x1="0" y1="0" x2="100" y2="0" stroke="#5a6b69" stroke-width="2"/><line x1="0" y1="-5" x2="0" y2="5" stroke="#5a6b69" stroke-width="2"/><line x1="100" y1="-5" x2="100" y2="5" stroke="#5a6b69" stroke-width="2"/>
               <text x="50" y="17" text-anchor="middle">1 m</text>
             </g>
@@ -404,60 +414,83 @@
         <span><i class="psw" style="background:#e2c091;border-color:#b07d3f"></i>鞋櫃</span>
         <span><i class="psw" style="background:#ecdcb6;border-color:#bb9a55"></i>桌子</span>
       </div>
-      <div class="pnote">俯視示意 · 1 格＝50cm · 外圍 <b>500 × 500cm（暫定）</b>。鞋櫃背面靠沙發左側（非貴妃側）、與沙發垂直。<b>*</b> 鞋櫃深、桌子尺寸待確認。</div>
+      <div class="pnote">俯視示意 · 1 格＝50cm · 外圍 <b>400 × 400cm（暫定）</b>。<b>入口在鞋櫃左側</b>；鞋櫃背面靠沙發左側（非貴妃側）、與沙發垂直。<b>*</b> 鞋櫃深、桌子尺寸待確認。</div>
     </details>`;
   }
 
   function masterBedroomLayout(){
-    return `<details class="layoutbox" open>
-      <summary><div class="lico"><i data-lucide="scan-line"></i></div><div class="lname">擺放示意圖</div><div class="arrow"><i data-lucide="chevron-down"></i></div></summary>
-      <div class="planwrap">
-        <svg viewBox="0 0 500 540" role="img" aria-label="主臥床架擺放俯視示意圖，室內 250x300 公分">
-          <defs><pattern id="bgrid" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M50 0 H0 V50" fill="none" stroke="#e6efee" stroke-width="1"/></pattern></defs>
-          <g transform="translate(70,64) scale(1.4)" font-family="-apple-system,'PingFang TC','Noto Sans TC',sans-serif">
-            <rect x="0" y="0" width="250" height="300" fill="url(#bgrid)"/>
+    const planA = `<svg viewBox="0 0 380 440" role="img" aria-label="主臥床直放示意圖">
+          <defs><pattern id="mg1" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M50 0 H0 V50" fill="none" stroke="#e6efee" stroke-width="1"/></pattern></defs>
+          <g transform="translate(50,46) scale(1.15)" font-family="-apple-system,'PingFang TC','Noto Sans TC',sans-serif">
+            <rect x="0" y="0" width="250" height="300" fill="url(#mg1)"/>
+            <rect x="152" y="0" width="98" height="300" fill="#2b9da3" opacity="0.07"/>
+            <rect x="0" y="188" width="152" height="112" fill="#2b9da3" opacity="0.07"/>
             <rect x="0" y="0" width="250" height="300" fill="none" stroke="#7d928f" stroke-width="2.5" rx="2"/>
-            <text x="210" y="13" font-size="9" font-weight="700" fill="#7d928f">床頭牆</text>
-
-            <rect x="18" y="0" width="160" height="200" rx="4" fill="#d9c4a0" stroke="#b08f5f" stroke-width="2"/>
-            <rect x="22" y="10" width="152" height="185" rx="3" fill="#eef2f5" stroke="#b9c6cf" stroke-width="1.5"/>
-            <rect x="22" y="64" width="152" height="131" fill="#e3ebf1" opacity="0.6"/>
-            <line x1="22" y1="64" x2="174" y2="64" stroke="#b9c6cf" stroke-width="1.2"/>
-            <rect x="30" y="18" width="60" height="34" rx="4" fill="#f7fafc" stroke="#cdd8e0" stroke-width="1"/>
-            <rect x="106" y="18" width="60" height="34" rx="4" fill="#f7fafc" stroke="#cdd8e0" stroke-width="1"/>
-            <text x="98" y="118" text-anchor="middle" font-size="11" font-weight="800" fill="#3f4a55">床架</text>
-            <text x="98" y="131" text-anchor="middle" font-size="7.5" font-weight="600" fill="#3f4a55">標準雙人（暫定）</text>
-            <text x="98" y="141" text-anchor="middle" font-size="7.5" font-weight="600" fill="#3f4a55">152 × 188 cm</text>
-
-            <path d="M150 300 A75 75 0 0 0 150 225" fill="none" stroke="#b0b8b8" stroke-width="1" stroke-dasharray="3 3"/>
-            <line x1="150" y1="300" x2="150" y2="225" stroke="#8a9a98" stroke-width="2"/>
-            <text x="192" y="293" text-anchor="middle" font-size="8" font-weight="600" fill="#7d928f">門</text>
-
-            <g stroke="#6f8482" stroke-width="0.8" fill="#6f8482" font-size="10" font-weight="700">
-              <line x1="0" y1="-20" x2="250" y2="-20"/><line x1="0" y1="-25" x2="0" y2="-15"/><line x1="250" y1="-25" x2="250" y2="-15"/>
-              <rect x="98" y="-28" width="54" height="15" rx="3" fill="#ffffff" stroke="none"/><text x="125" y="-17" text-anchor="middle" fill="#22302f">主臥 250</text>
-              <line x1="270" y1="0" x2="270" y2="300"/><line x1="265" y1="0" x2="275" y2="0"/><line x1="265" y1="300" x2="275" y2="300"/>
-              <g transform="translate(284,150) rotate(90)"><rect x="-18" y="-8" width="36" height="15" rx="3" fill="#ffffff" stroke="none"/><text x="0" y="3" text-anchor="middle" fill="#22302f">300</text></g>
-              <line x1="22" y1="212" x2="174" y2="212"/><line x1="22" y1="207" x2="22" y2="217"/><line x1="174" y1="207" x2="174" y2="217"/>
-              <rect x="72" y="214" width="52" height="15" rx="3" fill="#ffffff" stroke="none"/><text x="98" y="225" text-anchor="middle" fill="#22302f">床寬 152</text>
-              <line x1="8" y1="10" x2="8" y2="195"/><line x1="3" y1="10" x2="13" y2="10"/><line x1="3" y1="195" x2="13" y2="195"/>
-              <g transform="translate(-4,102) rotate(-90)"><rect x="-22" y="-8" width="44" height="15" rx="3" fill="#ffffff" stroke="none"/><text x="0" y="3" text-anchor="middle" fill="#22302f">床長 188</text></g>
-              <line x1="150" y1="316" x2="225" y2="316"/><line x1="150" y1="311" x2="150" y2="321"/><line x1="225" y1="311" x2="225" y2="321"/>
-              <rect x="165" y="318" width="45" height="15" rx="3" fill="#ffffff" stroke="none"/><text x="187" y="329" text-anchor="middle" fill="#22302f">門 75</text>
+            <text x="205" y="12" font-size="8.5" font-weight="700" fill="#7d928f">床頭牆</text>
+            <rect x="0" y="0" width="152" height="188" rx="3" fill="#d9c4a0" stroke="#b08f5f" stroke-width="2"/>
+            <rect x="6" y="12" width="140" height="170" rx="2" fill="#eef2f5" stroke="#b9c6cf" stroke-width="1.2"/>
+            <rect x="6" y="62" width="140" height="120" fill="#e3ebf1" opacity="0.6"/>
+            <line x1="6" y1="62" x2="146" y2="62" stroke="#b9c6cf" stroke-width="1"/>
+            <rect x="16" y="20" width="56" height="32" rx="4" fill="#f7fafc" stroke="#cdd8e0" stroke-width="1"/>
+            <rect x="80" y="20" width="56" height="32" rx="4" fill="#f7fafc" stroke="#cdd8e0" stroke-width="1"/>
+            <text x="76" y="116" text-anchor="middle" font-size="11" font-weight="800" fill="#3f4a55">床架（直放）</text>
+            <text x="76" y="128" text-anchor="middle" font-size="7.5" font-weight="600" fill="#3f4a55">152 × 188（暫定）</text>
+            <g stroke="#6f8482" stroke-width="0.8" fill="#6f8482" font-size="9.5" font-weight="700">
+              <line x1="0" y1="-16" x2="250" y2="-16"/><line x1="0" y1="-20" x2="0" y2="-12"/><line x1="250" y1="-20" x2="250" y2="-12"/>
+              <rect x="98" y="-24" width="54" height="14" rx="3" fill="#ffffff" stroke="none"/><text x="125" y="-14" text-anchor="middle" fill="#22302f">主臥 250</text>
+              <line x1="264" y1="0" x2="264" y2="300"/><line x1="260" y1="0" x2="268" y2="0"/><line x1="260" y1="300" x2="268" y2="300"/>
+              <g transform="translate(277,150) rotate(90)"><rect x="-16" y="-7" width="32" height="14" rx="3" fill="#ffffff" stroke="none"/><text x="0" y="3" text-anchor="middle" fill="#22302f">300</text></g>
             </g>
-
-            <g transform="translate(30,255)" font-size="10" font-weight="700" fill="#5a6b69">
-              <line x1="0" y1="0" x2="100" y2="0" stroke="#5a6b69" stroke-width="2"/><line x1="0" y1="-5" x2="0" y2="5" stroke="#5a6b69" stroke-width="2"/><line x1="100" y1="-5" x2="100" y2="5" stroke="#5a6b69" stroke-width="2"/>
-              <text x="50" y="15" text-anchor="middle">1 m</text>
+            <g stroke="#1d8087" stroke-width="0.8" fill="#1d8087" font-size="9.5" font-weight="800">
+              <line x1="152" y1="150" x2="250" y2="150"/><line x1="152" y1="146" x2="152" y2="154"/><line x1="250" y1="146" x2="250" y2="154"/>
+              <rect x="176" y="142" width="50" height="14" rx="3" fill="#e9f4f3" stroke="none"/><text x="201" y="152" text-anchor="middle">走道 98</text>
+              <line x1="76" y1="188" x2="76" y2="300"/><line x1="72" y1="188" x2="80" y2="188"/><line x1="72" y1="300" x2="80" y2="300"/>
+              <rect x="51" y="237" width="50" height="14" rx="3" fill="#e9f4f3" stroke="none"/><text x="76" y="247" text-anchor="middle">床尾 112</text>
             </g>
           </g>
-        </svg>
+        </svg>`;
+    const planB = `<svg viewBox="0 0 380 440" role="img" aria-label="主臥床橫放示意圖">
+          <defs><pattern id="mg2" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M50 0 H0 V50" fill="none" stroke="#e6efee" stroke-width="1"/></pattern></defs>
+          <g transform="translate(50,46) scale(1.15)" font-family="-apple-system,'PingFang TC','Noto Sans TC',sans-serif">
+            <rect x="0" y="0" width="250" height="300" fill="url(#mg2)"/>
+            <rect x="188" y="0" width="62" height="300" fill="#2b9da3" opacity="0.07"/>
+            <rect x="0" y="152" width="188" height="148" fill="#2b9da3" opacity="0.07"/>
+            <rect x="0" y="0" width="250" height="300" fill="none" stroke="#7d928f" stroke-width="2.5" rx="2"/>
+            <text x="10" y="164" font-size="8.5" font-weight="700" fill="#7d928f" transform="rotate(-90 10 164)">床頭牆</text>
+            <rect x="0" y="0" width="188" height="152" rx="3" fill="#d9c4a0" stroke="#b08f5f" stroke-width="2"/>
+            <rect x="12" y="6" width="170" height="140" rx="2" fill="#eef2f5" stroke="#b9c6cf" stroke-width="1.2"/>
+            <rect x="66" y="6" width="116" height="140" fill="#e3ebf1" opacity="0.6"/>
+            <line x1="66" y1="6" x2="66" y2="146" stroke="#b9c6cf" stroke-width="1"/>
+            <rect x="18" y="16" width="34" height="54" rx="4" fill="#f7fafc" stroke="#cdd8e0" stroke-width="1"/>
+            <rect x="18" y="82" width="34" height="54" rx="4" fill="#f7fafc" stroke="#cdd8e0" stroke-width="1"/>
+            <text x="120" y="72" text-anchor="middle" font-size="11" font-weight="800" fill="#3f4a55">床架（橫放）</text>
+            <text x="120" y="84" text-anchor="middle" font-size="7.5" font-weight="600" fill="#3f4a55">188 × 152（暫定）</text>
+            <g stroke="#6f8482" stroke-width="0.8" fill="#6f8482" font-size="9.5" font-weight="700">
+              <line x1="0" y1="-16" x2="250" y2="-16"/><line x1="0" y1="-20" x2="0" y2="-12"/><line x1="250" y1="-20" x2="250" y2="-12"/>
+              <rect x="98" y="-24" width="54" height="14" rx="3" fill="#ffffff" stroke="none"/><text x="125" y="-14" text-anchor="middle" fill="#22302f">主臥 250</text>
+              <line x1="264" y1="0" x2="264" y2="300"/><line x1="260" y1="0" x2="268" y2="0"/><line x1="260" y1="300" x2="268" y2="300"/>
+              <g transform="translate(277,150) rotate(90)"><rect x="-16" y="-7" width="32" height="14" rx="3" fill="#ffffff" stroke="none"/><text x="0" y="3" text-anchor="middle" fill="#22302f">300</text></g>
+            </g>
+            <g stroke="#1d8087" stroke-width="0.8" fill="#1d8087" font-size="9.5" font-weight="800">
+              <line x1="188" y1="76" x2="250" y2="76"/><line x1="188" y1="72" x2="188" y2="80"/><line x1="250" y1="72" x2="250" y2="80"/>
+              <rect x="194" y="68" width="50" height="14" rx="3" fill="#e9f4f3" stroke="none"/><text x="219" y="78" text-anchor="middle">走道 62</text>
+              <line x1="94" y1="152" x2="94" y2="300"/><line x1="90" y1="152" x2="98" y2="152"/><line x1="90" y1="300" x2="98" y2="300"/>
+              <rect x="69" y="219" width="50" height="14" rx="3" fill="#e9f4f3" stroke="none"/><text x="94" y="229" text-anchor="middle">床尾 148</text>
+            </g>
+          </g>
+        </svg>`;
+    return `<details class="layoutbox" open>
+      <summary><div class="lico"><i data-lucide="scan-line"></i></div><div class="lname">擺放示意圖（兩方案）</div><div class="arrow"><i data-lucide="chevron-down"></i></div></summary>
+      <div class="planrow">
+        <div><div class="pcap">方案 A · 床直放</div><div class="planwrap">${planA}</div></div>
+        <div><div class="pcap">方案 B · 床橫放</div><div class="planwrap">${planB}</div></div>
       </div>
       <div class="plegend">
         <span><i class="psw" style="background:#d9c4a0;border-color:#b08f5f"></i>床架</span>
         <span><i class="psw" style="background:#eef2f5;border-color:#b9c6cf"></i>床墊／寢具</span>
+        <span><i class="psw" style="background:#e9f4f3;border-color:#1d8087"></i>剩餘空間</span>
       </div>
-      <div class="pnote">俯視示意 · 1 格＝50cm · 室內 <b>250 × 300cm</b>（實測）。床架先<b>暫定標準雙人 152 × 188cm</b>，床頭靠牆；門寬 75cm。實際床架尺寸確認後再更新。</div>
+      <div class="pnote">俯視示意 · 1 格＝50cm · 室內 <b>250 × 300cm</b>（實測）。床架暫定<b>標準雙人 152 × 188cm</b>。<b>A 直放</b>：右側走道 98cm、床尾 112cm；<b>B 橫放</b>：右側走道 62cm、床尾 148cm。實際床架尺寸確認後再更新。</div>
     </details>`;
   }
 
