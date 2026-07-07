@@ -94,6 +94,14 @@
   .item .nm{font-weight:700;font-size:15.5px;padding-right:30px;letter-spacing:.2px}
   .item .meta{font-size:12px;color:var(--sub);margin-top:5px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
   .item .note{font-size:12.5px;color:#5a7173;margin-top:8px;background:#f3f9f9;border:1px solid #e4f0f0;border-radius:10px;padding:8px 10px;line-height:1.55;white-space:pre-wrap}
+  .item .note.noteopt{white-space:normal}
+  .optlead{font-size:12px;color:#5a7173;white-space:pre-wrap;margin-bottom:8px}
+  .optpills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px}
+  .optpill{font:inherit;font-size:11.5px;font-weight:700;border:1px solid #cfe0e0;background:#fff;color:#3a5f61;
+        padding:4px 11px;border-radius:99px;cursor:pointer;transition:.15s}
+  .optpill:hover{border-color:var(--accent)}
+  .optpill.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .optbody{font-size:12.5px;color:#5a7173;white-space:pre-wrap;line-height:1.55}
   .badge{font-size:11px;font-weight:800;border-radius:7px;padding:3px 9px;white-space:nowrap}
   .b-own{background:var(--own-bg);color:#5b6b6c} .b-buy{background:var(--buy-bg);color:#1d8087}
   .b-decide{background:var(--decide-bg);color:#b07d11} .b-ordered{background:var(--ordered-bg);color:#1f8f63}
@@ -336,7 +344,7 @@
   const ICON={'沙發':'sofa','STOKKE 椅子':'armchair','桌子':'table','客廳多功能桌':'table-2','電視櫃':'gallery-horizontal-end',
     '電視':'tv','床架':'bed-double','微波爐':'microwave','洗衣機':'washing-machine','鞋櫃':'archive','升降桌':'table-2'};
 
-  let ITEMS=[], groupMode='area', typeFilter='all', editingId=null;
+  let ITEMS=[], groupMode='area', typeFilter='all', editingId=null, OPTS={};
 
   function iconFor(it){ if(ICON[it.name])return ICON[it.name]; if(/嬰兒床|床/.test(it.name))return 'baby';
     return it.type==='家電'?'plug-zap':'package'; }
@@ -425,7 +433,13 @@
             <rect x="0" y="0" width="250" height="300" fill="url(#mg1)"/>
             <rect x="152" y="0" width="98" height="300" fill="#2b9da3" opacity="0.07"/>
             <rect x="0" y="188" width="152" height="112" fill="#2b9da3" opacity="0.07"/>
-            <rect x="0" y="0" width="250" height="300" fill="none" stroke="#7d928f" stroke-width="2.5" rx="2"/>
+            <line x1="0" y1="0" x2="250" y2="0" stroke="#7d928f" stroke-width="2.5"/>
+            <line x1="250" y1="0" x2="250" y2="300" stroke="#7d928f" stroke-width="2.5"/>
+            <line x1="0" y1="300" x2="175" y2="300" stroke="#7d928f" stroke-width="2.5"/>
+            <line x1="0" y1="0" x2="0" y2="300" stroke="#7d928f" stroke-width="2.5"/>
+            <path d="M250 300 A75 75 0 0 0 175 225" fill="none" stroke="#b0b8b8" stroke-width="1" stroke-dasharray="3 3"/>
+            <line x1="175" y1="300" x2="175" y2="225" stroke="#8a9a98" stroke-width="1.6"/>
+            <text x="214" y="291" text-anchor="middle" font-size="8" font-weight="600" fill="#7d928f">門</text>
             <text x="205" y="12" font-size="8.5" font-weight="700" fill="#7d928f">床頭牆</text>
             <rect x="0" y="0" width="152" height="188" rx="3" fill="#d9c4a0" stroke="#b08f5f" stroke-width="2"/>
             <rect x="6" y="12" width="140" height="170" rx="2" fill="#eef2f5" stroke="#b9c6cf" stroke-width="1.2"/>
@@ -455,7 +469,13 @@
             <rect x="0" y="0" width="250" height="300" fill="url(#mg2)"/>
             <rect x="188" y="0" width="62" height="300" fill="#2b9da3" opacity="0.07"/>
             <rect x="0" y="152" width="188" height="148" fill="#2b9da3" opacity="0.07"/>
-            <rect x="0" y="0" width="250" height="300" fill="none" stroke="#7d928f" stroke-width="2.5" rx="2"/>
+            <line x1="0" y1="0" x2="250" y2="0" stroke="#7d928f" stroke-width="2.5"/>
+            <line x1="250" y1="0" x2="250" y2="300" stroke="#7d928f" stroke-width="2.5"/>
+            <line x1="0" y1="300" x2="175" y2="300" stroke="#7d928f" stroke-width="2.5"/>
+            <line x1="0" y1="0" x2="0" y2="300" stroke="#7d928f" stroke-width="2.5"/>
+            <path d="M250 300 A75 75 0 0 0 175 225" fill="none" stroke="#b0b8b8" stroke-width="1" stroke-dasharray="3 3"/>
+            <line x1="175" y1="300" x2="175" y2="225" stroke="#8a9a98" stroke-width="1.6"/>
+            <text x="214" y="291" text-anchor="middle" font-size="8" font-weight="600" fill="#7d928f">門</text>
             <text x="10" y="164" font-size="8.5" font-weight="700" fill="#7d928f" transform="rotate(-90 10 164)">床頭牆</text>
             <rect x="0" y="0" width="188" height="152" rx="3" fill="#d9c4a0" stroke="#b08f5f" stroke-width="2"/>
             <rect x="12" y="6" width="170" height="140" rx="2" fill="#eef2f5" stroke="#b9c6cf" stroke-width="1.2"/>
@@ -490,7 +510,7 @@
         <span><i class="psw" style="background:#eef2f5;border-color:#b9c6cf"></i>床墊／寢具</span>
         <span><i class="psw" style="background:#e9f4f3;border-color:#1d8087"></i>剩餘空間</span>
       </div>
-      <div class="pnote">俯視示意 · 1 格＝50cm · 室內 <b>250 × 300cm</b>（實測）。床架暫定<b>標準雙人 152 × 188cm</b>。<b>A 直放</b>：右側走道 98cm、床尾 112cm；<b>B 橫放</b>：右側走道 62cm、床尾 148cm。實際床架尺寸確認後再更新。</div>
+      <div class="pnote">俯視示意 · 1 格＝50cm · 室內 <b>250 × 300cm</b>（實測），門在<b>右下角</b>（寬75）。床架暫定<b>標準雙人 152 × 188cm</b>。<b>A 直放</b>：右側走道 98cm、床尾 112cm；<b>B 橫放</b>：右側走道 62cm、床尾 148cm。實際床架尺寸確認後再更新。</div>
     </details>`;
   }
 
@@ -502,7 +522,13 @@
           <defs><pattern id="sgrid" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M50 0 H0 V50" fill="none" stroke="#e6efee" stroke-width="1"/></pattern></defs>
           <g transform="translate(70,60) scale(1.6)" font-family="-apple-system,'PingFang TC','Noto Sans TC',sans-serif">
             <rect x="0" y="0" width="250" height="195" fill="url(#sgrid)"/>
-            <rect x="0" y="0" width="250" height="195" fill="none" stroke="#7d928f" stroke-width="2.2" rx="2"/>
+            <line x1="0" y1="0" x2="250" y2="0" stroke="#7d928f" stroke-width="2.2"/>
+            <line x1="250" y1="0" x2="250" y2="195" stroke="#7d928f" stroke-width="2.2"/>
+            <line x1="0" y1="195" x2="175" y2="195" stroke="#7d928f" stroke-width="2.2"/>
+            <line x1="0" y1="0" x2="0" y2="195" stroke="#7d928f" stroke-width="2.2"/>
+            <path d="M250 195 A75 75 0 0 0 175 120" fill="none" stroke="#b0b8b8" stroke-width="1" stroke-dasharray="3 3"/>
+            <line x1="175" y1="195" x2="175" y2="120" stroke="#8a9a98" stroke-width="1.6"/>
+            <text x="214" y="186" text-anchor="middle" font-size="8" font-weight="600" fill="#7d928f">門</text>
             <text x="205" y="12" font-size="8.5" font-weight="700" fill="#7d928f">背牆</text>
 
             <rect x="12" y="0" width="149" height="77" rx="3" fill="#cfe0dd" stroke="#4f9aa0" stroke-width="2"/>
@@ -511,25 +537,20 @@
             <text x="86" y="49" text-anchor="middle" font-size="8" font-weight="600" fill="#22302f">桌版 149 × 77</text>
             <text x="86" y="59" text-anchor="middle" font-size="7.5" font-weight="600" fill="#4f9aa0">高9・電動升降</text>
 
-            <rect x="62" y="90" width="46" height="42" rx="7" fill="#e6ebe9" stroke="#9fb4b0" stroke-width="1.5"/>
-            <rect x="62" y="90" width="46" height="8" rx="3" fill="#cddad7"/>
-            <text x="85" y="116" text-anchor="middle" font-size="8" font-weight="700" fill="#5f7573">椅</text>
+            <rect x="66" y="86" width="46" height="40" rx="7" fill="#e6ebe9" stroke="#9fb4b0" stroke-width="1.5"/>
+            <rect x="66" y="86" width="46" height="8" rx="3" fill="#cddad7"/>
+            <text x="89" y="111" text-anchor="middle" font-size="8" font-weight="700" fill="#5f7573">椅</text>
 
-            <rect x="116" y="126" width="124" height="66" rx="5" fill="#e6d3b0" stroke="#b79a63" stroke-width="2"/>
-            <line x1="116" y1="159" x2="240" y2="159" stroke="#b79a63" stroke-width="1" opacity=".5"/>
-            <text x="178" y="152" text-anchor="middle" font-size="10" font-weight="800" fill="#5a4a2c">Didi 嬰兒床</text>
-            <text x="178" y="164" text-anchor="middle" font-size="7.5" font-weight="600" fill="#5a4a2c">外徑 124 × 66</text>
+            <rect x="0" y="129" width="124" height="66" rx="5" fill="#e6d3b0" stroke="#b79a63" stroke-width="2"/>
+            <line x1="62" y1="129" x2="62" y2="195" stroke="#b79a63" stroke-width="1" opacity=".5"/>
+            <text x="62" y="156" text-anchor="middle" font-size="10" font-weight="800" fill="#5a4a2c">Didi 嬰兒床</text>
+            <text x="62" y="168" text-anchor="middle" font-size="7.5" font-weight="600" fill="#5a4a2c">外徑 124 × 66</text>
 
             <g stroke="#6f8482" stroke-width="0.8" fill="#6f8482" font-size="10" font-weight="700">
               <line x1="0" y1="-18" x2="250" y2="-18"/><line x1="0" y1="-23" x2="0" y2="-13"/><line x1="250" y1="-23" x2="250" y2="-13"/>
               <rect x="98" y="-26" width="54" height="15" rx="3" fill="#ffffff" stroke="none"/><text x="125" y="-15" text-anchor="middle" fill="#22302f">書房 250</text>
               <line x1="272" y1="0" x2="272" y2="195"/><line x1="267" y1="0" x2="277" y2="0"/><line x1="267" y1="195" x2="277" y2="195"/>
               <g transform="translate(286,97) rotate(90)"><rect x="-16" y="-8" width="32" height="15" rx="3" fill="#ffffff" stroke="none"/><text x="0" y="3" text-anchor="middle" fill="#22302f">195</text></g>
-            </g>
-
-            <g transform="translate(8,170)" font-size="10" font-weight="700" fill="#5a6b69">
-              <line x1="0" y1="0" x2="100" y2="0" stroke="#5a6b69" stroke-width="2"/><line x1="0" y1="-5" x2="0" y2="5" stroke="#5a6b69" stroke-width="2"/><line x1="100" y1="-5" x2="100" y2="5" stroke="#5a6b69" stroke-width="2"/>
-              <text x="50" y="15" text-anchor="middle">1 m</text>
             </g>
           </g>
         </svg>
@@ -539,7 +560,7 @@
         <span><i class="psw" style="background:#e6ebe9;border-color:#9fb4b0"></i>椅</span>
         <span><i class="psw" style="background:#e6d3b0;border-color:#b79a63"></i>嬰兒床</span>
       </div>
-      <div class="pnote">俯視示意 · 1 格＝50cm · 室內 <b>250 × 195cm</b>（實測）。升降桌桌版 <b>149 × 77cm、高9cm</b>（電動升降，桌腳約140cm），沿背牆擺放；嬰兒床為已下訂的 Didi（外徑 124×66）。</div>
+      <div class="pnote">俯視示意 · 1 格＝50cm · 室內 <b>250 × 195cm</b>（實測），門在<b>右下角</b>。升降桌桌版 <b>149 × 77cm、高9cm</b>（電動升降，桌腳約140cm）沿背牆擺放；<b>嬰兒床（Didi・外徑124×66）改放左下角</b>。</div>
     </details>`;
   }
 
@@ -556,6 +577,36 @@
     }
   }
 
+  function parseOptions(note){
+    if(!note) return null;
+    const lines=note.split('\n');
+    const idx=[];
+    lines.forEach((l,i)=>{ if(/^[A-Za-z]\.\s/.test(l)) idx.push(i); });
+    if(idx.length<2) return null;
+    const lead=lines.slice(0,idx[0]).join('\n').trim();
+    const options=idx.map((start,k)=>{
+      const end = k+1<idx.length ? idx[k+1] : lines.length;
+      const body=lines.slice(start,end).join('\n').trim();
+      const m=lines[start].match(/^([A-Za-z])\.\s*(.+)$/);
+      const letter=m?m[1].toUpperCase():String(k+1);
+      const title=(m?m[2]:'').split(/[\s｜　（(]/)[0]||('選項'+letter);
+      return {letter,title,body};
+    });
+    return {lead,options};
+  }
+  function renderNote(it){
+    const p=parseOptions(it.note);
+    if(!p) return `<div class="note">${linkify(it.note)}</div>`;
+    OPTS[it.id]=p.options;
+    const pills=p.options.map((o,i)=>
+      `<button class="optpill${i===0?' on':''}" data-optid="${it.id}" data-opt="${i}">${esc(o.letter)}·${esc(o.title)}</button>`).join('');
+    return `<div class="note noteopt">
+      ${p.lead?`<div class="optlead">${linkify(p.lead)}</div>`:''}
+      <div class="optpills">${pills}</div>
+      <div class="optbody" id="optbody-${it.id}">${linkify(p.options[0].body)}</div>
+    </div>`;
+  }
+
   function itemCard(it){
     const st=STATUS[it.status]||STATUS.buy;
     return `<div class="item s-${it.status} ${it.done?'done':''}" data-id="${it.id}">
@@ -564,7 +615,7 @@
       <div class="body">
         <div class="nm">${esc(it.name)}</div>
         <div class="meta"><span class="badge ${st.cls}">${st.label}</span><span class="tag2">${it.area}</span><span class="tag2">${it.type}</span></div>
-        ${it.note?`<div class="note">${linkify(it.note)}</div>`:''}
+        ${it.note?renderNote(it):''}
       </div>
       <button class="edit" data-act="edit"><i data-lucide="pencil"></i></button>
     </div>`;
@@ -624,6 +675,15 @@
       const id=+el.dataset.id;
       el.querySelector('[data-act="toggle"]').addEventListener('click',e=>{e.stopPropagation();toggleDone(id,el);});
       el.querySelector('[data-act="edit"]').addEventListener('click',e=>{e.stopPropagation();openEdit(id);});
+      el.querySelectorAll('.optpill').forEach(b=>b.addEventListener('click',e=>{
+        e.stopPropagation();
+        const oid=+b.dataset.optid, oi=+b.dataset.opt, opts=OPTS[oid];
+        if(!opts||!opts[oi]) return;
+        el.querySelectorAll('.optpill').forEach(x=>x.classList.remove('on'));
+        b.classList.add('on');
+        const body=document.getElementById('optbody-'+oid);
+        if(body) body.innerHTML=linkify(opts[oi].body);
+      }));
     });
   }
 
