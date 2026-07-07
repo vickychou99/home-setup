@@ -361,6 +361,7 @@
           <g transform="translate(70,72) scale(1.08)" font-family="-apple-system,'PingFang TC','Noto Sans TC',sans-serif">
             <rect x="0" y="0" width="405" height="295" fill="url(#lgrid)"/>
             <rect x="356" y="0" width="49" height="295" fill="#2b9da3" opacity="0.08"/>
+            <rect x="0" y="115" width="147" height="180" fill="#2b9da3" opacity="0.06"/>
             <rect x="115" y="167" width="241" height="128" fill="#2b9da3" opacity="0.05"/>
             <line x1="115" y1="0" x2="405" y2="0" stroke="#7d928f" stroke-width="3.2"/>
             <line x1="405" y1="0" x2="405" y2="295" stroke="#7d928f" stroke-width="3.2"/>
@@ -394,7 +395,7 @@
             <text x="214" y="122" text-anchor="middle" font-size="12" font-weight="800" fill="#4a3f22">茶几</text>
             <text x="214" y="134" text-anchor="middle" font-size="8" font-weight="600" fill="#4a3f22">100 × 50cm</text>
 
-            <g stroke="#6f8482" stroke-width="1" fill="#6f8482" font-size="12" font-weight="600">
+            <g stroke="#6f8482" stroke-width="1" fill="#6f8482" font-size="12" font-weight="400">
               <line x1="0" y1="-46" x2="405" y2="-46"/><line x1="0" y1="-52" x2="0" y2="-40"/><line x1="405" y1="-52" x2="405" y2="-40"/>
               <rect x="167" y="-55" width="72" height="16" rx="4" fill="#ffffff" stroke="none"/><text x="203" y="-43" text-anchor="middle" fill="#22302f">總寬 405</text>
               <line x1="0" y1="-24" x2="115" y2="-24"/><line x1="0" y1="-30" x2="0" y2="-18"/><line x1="115" y1="-30" x2="115" y2="-18"/>
@@ -413,11 +414,13 @@
               <rect x="107" y="96" width="48" height="15" rx="4" fill="#ffffff" stroke="none"/><text x="131" y="107" text-anchor="middle" fill="#22302f">深 32</text>
             </g>
 
-            <g stroke="#1d8087" stroke-width="1" fill="#1d8087" font-size="12" font-weight="600">
+            <g stroke="#1d8087" stroke-width="1" fill="#1d8087" font-size="12" font-weight="400">
               <line x1="356" y1="232" x2="405" y2="232"/><line x1="356" y1="227" x2="356" y2="237"/><line x1="405" y1="227" x2="405" y2="237"/>
               <rect x="358" y="239" width="58" height="15" rx="4" fill="#eef7f6" stroke="none"/><text x="387" y="250" text-anchor="middle">沙發旁 49</text>
               <line x1="330" y1="167" x2="330" y2="295"/><line x1="325" y1="167" x2="335" y2="167"/><line x1="325" y1="295" x2="335" y2="295"/>
-              <rect x="302" y="256" width="56" height="15" rx="4" fill="#eef7f6" stroke="none"/><text x="330" y="267" text-anchor="middle">走道 128</text>
+              <rect x="298" y="256" width="64" height="15" rx="4" fill="#eef7f6" stroke="none"/><text x="330" y="267" text-anchor="middle">沙發前 128</text>
+              <line x1="0" y1="270" x2="147" y2="270"/><line x1="0" y1="265" x2="0" y2="275"/><line x1="147" y1="265" x2="147" y2="275"/>
+              <rect x="42" y="276" width="62" height="15" rx="4" fill="#eef7f6" stroke="none"/><text x="73" y="287" text-anchor="middle">走道 147</text>
             </g>
 
             <g transform="translate(150,255)" font-size="11.5" font-weight="700" fill="#5a6b69">
@@ -435,7 +438,7 @@
         <span><i class="psw" style="background:#e6f3f2;border-color:#1d8087"></i>剩餘空間</span>
         <span><i class="psw" style="background:#f6e2c0;border-color:#c79a3a"></i>開門淨空</span>
       </div>
-      <div class="pnote">俯視示意 · 1 格＝50cm · 客廳 <b>總寬 405（牆290＋門115）× 長295cm</b>。入口（門115）需<b>半徑115cm 開門淨空</b>（橘色扇形）；<b>鞋櫃（80×深32）貼齊入口門</b>、背面靠沙發左側，與沙發垂直；茶几 100×50cm、升降高47–72。剩餘空間合併到<b>沙發旁 49cm</b>；門前走道（沙發前）128cm。</div>
+      <div class="pnote">俯視示意 · 1 格＝50cm · 客廳 <b>總寬 405（牆290＋門115）× 長295cm</b>。入口（門115）需<b>半徑115cm 開門淨空</b>（橘色扇形）；<b>鞋櫃（80×深32）貼齊入口門</b>、背面靠沙發左側，與沙發垂直；茶几 100×50cm、升降高47–72。剩餘空間：<b>沙發旁 49cm</b>；<b>走道</b>為入口門前那塊（寬約147cm），沙發前另有 128cm 深。</div>
     </details>`;
   }
 
@@ -468,13 +471,13 @@
             <circle cx="40" cy="250" r="1.6" fill="#97845f"/><circle cx="50" cy="250" r="1.6" fill="#97845f"/>
             <text x="45" y="270" text-anchor="middle" font-size="8.5" font-weight="800" fill="#4a3f2c">衣櫃</text>
             <text x="45" y="281" text-anchor="middle" font-size="7" font-weight="600" fill="#4a3f2c">90×57*</text>
-            <g stroke="#6f8482" stroke-width="0.8" fill="#6f8482" font-size="9.5" font-weight="600">
+            <g stroke="#6f8482" stroke-width="0.8" fill="#6f8482" font-size="9.5" font-weight="400">
               <line x1="0" y1="-16" x2="250" y2="-16"/><line x1="0" y1="-20" x2="0" y2="-12"/><line x1="250" y1="-20" x2="250" y2="-12"/>
               <rect x="98" y="-24" width="54" height="14" rx="3" fill="#ffffff" stroke="none"/><text x="125" y="-14" text-anchor="middle" fill="#22302f">主臥 250</text>
               <line x1="264" y1="0" x2="264" y2="300"/><line x1="260" y1="0" x2="268" y2="0"/><line x1="260" y1="300" x2="268" y2="300"/>
               <g transform="translate(277,150) rotate(90)"><rect x="-16" y="-7" width="32" height="14" rx="3" fill="#ffffff" stroke="none"/><text x="0" y="3" text-anchor="middle" fill="#22302f">300</text></g>
             </g>
-            <g stroke="#1d8087" stroke-width="0.8" fill="#1d8087" font-size="9.5" font-weight="600">
+            <g stroke="#1d8087" stroke-width="0.8" fill="#1d8087" font-size="9.5" font-weight="400">
               <line x1="152" y1="150" x2="250" y2="150"/><line x1="152" y1="146" x2="152" y2="154"/><line x1="250" y1="146" x2="250" y2="154"/>
               <rect x="176" y="142" width="50" height="14" rx="3" fill="#e9f4f3" stroke="none"/><text x="201" y="152" text-anchor="middle">走道 98</text>
               <line x1="45" y1="188" x2="45" y2="243"/><line x1="41" y1="188" x2="49" y2="188"/><line x1="41" y1="243" x2="49" y2="243"/>
@@ -510,13 +513,13 @@
             <circle cx="40" cy="250" r="1.6" fill="#97845f"/><circle cx="50" cy="250" r="1.6" fill="#97845f"/>
             <text x="45" y="270" text-anchor="middle" font-size="8.5" font-weight="800" fill="#4a3f2c">衣櫃</text>
             <text x="45" y="281" text-anchor="middle" font-size="7" font-weight="600" fill="#4a3f2c">90×57*</text>
-            <g stroke="#6f8482" stroke-width="0.8" fill="#6f8482" font-size="9.5" font-weight="600">
+            <g stroke="#6f8482" stroke-width="0.8" fill="#6f8482" font-size="9.5" font-weight="400">
               <line x1="0" y1="-16" x2="250" y2="-16"/><line x1="0" y1="-20" x2="0" y2="-12"/><line x1="250" y1="-20" x2="250" y2="-12"/>
               <rect x="98" y="-24" width="54" height="14" rx="3" fill="#ffffff" stroke="none"/><text x="125" y="-14" text-anchor="middle" fill="#22302f">主臥 250</text>
               <line x1="264" y1="0" x2="264" y2="300"/><line x1="260" y1="0" x2="268" y2="0"/><line x1="260" y1="300" x2="268" y2="300"/>
               <g transform="translate(277,150) rotate(90)"><rect x="-16" y="-7" width="32" height="14" rx="3" fill="#ffffff" stroke="none"/><text x="0" y="3" text-anchor="middle" fill="#22302f">300</text></g>
             </g>
-            <g stroke="#1d8087" stroke-width="0.8" fill="#1d8087" font-size="9.5" font-weight="600">
+            <g stroke="#1d8087" stroke-width="0.8" fill="#1d8087" font-size="9.5" font-weight="400">
               <line x1="188" y1="76" x2="250" y2="76"/><line x1="188" y1="72" x2="188" y2="80"/><line x1="250" y1="72" x2="250" y2="80"/>
               <rect x="194" y="68" width="50" height="14" rx="3" fill="#e9f4f3" stroke="none"/><text x="219" y="78" text-anchor="middle">走道 62</text>
               <line x1="45" y1="152" x2="45" y2="243"/><line x1="41" y1="152" x2="49" y2="152"/><line x1="41" y1="243" x2="49" y2="243"/>
@@ -557,7 +560,7 @@
             <path d="M175 195 A75 75 0 0 1 250 120" fill="none" stroke="#c79a3a" stroke-width="1" stroke-dasharray="3 3"/>
             <line x1="250" y1="195" x2="250" y2="120" stroke="#8a9a98" stroke-width="1.6"/>
             <text x="206" y="174" text-anchor="middle" font-size="7.5" font-weight="700" fill="#a9781c">開門</text>
-            <g stroke="#1d8087" stroke-width="0.8" fill="#1d8087" font-size="9.5" font-weight="600">
+            <g stroke="#1d8087" stroke-width="0.8" fill="#1d8087" font-size="9.5" font-weight="400">
               <line x1="124" y1="162" x2="175" y2="162"/><line x1="124" y1="158" x2="124" y2="166"/><line x1="175" y1="158" x2="175" y2="166"/>
               <rect x="126" y="154" width="48" height="14" rx="3" fill="#eef7f6" stroke="none"/><text x="150" y="164" text-anchor="middle">走道 51</text>
             </g>
@@ -578,7 +581,7 @@
             <text x="62" y="156" text-anchor="middle" font-size="10" font-weight="800" fill="#5a4a2c">Didi 嬰兒床</text>
             <text x="62" y="168" text-anchor="middle" font-size="7.5" font-weight="600" fill="#5a4a2c">外徑 124 × 66</text>
 
-            <g stroke="#6f8482" stroke-width="0.8" fill="#6f8482" font-size="10" font-weight="600">
+            <g stroke="#6f8482" stroke-width="0.8" fill="#6f8482" font-size="10" font-weight="400">
               <line x1="0" y1="-18" x2="250" y2="-18"/><line x1="0" y1="-23" x2="0" y2="-13"/><line x1="250" y1="-23" x2="250" y2="-13"/>
               <rect x="98" y="-26" width="54" height="15" rx="3" fill="#ffffff" stroke="none"/><text x="125" y="-15" text-anchor="middle" fill="#22302f">書房 250</text>
               <line x1="272" y1="0" x2="272" y2="195"/><line x1="267" y1="0" x2="277" y2="0"/><line x1="267" y1="195" x2="277" y2="195"/>
